@@ -32,12 +32,24 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
+    // 放在第一个页面初始化。设置适配尺寸 (填入设计稿中设备的屏幕尺寸) 假如设计稿是按 iPhone6 的尺寸设计的 (iPhone6 750*1334)
+    ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
+
+    // print(' 设备宽度:${ScreenUtil.screenWidth}'); //Device width
+    // print(' 设备高度:${ScreenUtil.screenHeight}'); //Device height
+    // print(' 设备的像素密度:${ScreenUtil.pixelRatio}'); //Device pixel density
+    // print(' 实际宽度的 dp 与设计稿 px 的比例:${ScreenUtil.getInstance().scaleWidth}');
+    // print(' 实际高度的 dp 与设计稿 px 的比例:${ScreenUtil.getInstance().scaleHeight}');
     return Scaffold(
         backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
         appBar: AppBar(
           title: Text(Constants.appName),
         ),
-        body: tabPages[_currentIndex],
+        body: IndexedStack(
+          //IndexedStack防止底部tabs重新加载
+          children: tabPages,
+          index: _currentIndex,
+        ),
         bottomNavigationBar: BottomNavigationBar(
           fixedColor: Theme.of(context).primaryColor,
           type: BottomNavigationBarType.fixed,
