@@ -37,11 +37,14 @@ class _HomePageState extends State<HomePage>
             List<Map> swiper = (data['data']['slides'] as List).cast();
             List<Map> navigatorList = (data['data']['category'] as List).cast();
             String adPic = data['data']['advertesPicture']['PICTURE_ADDRESS'];
+            String leaderImgUrl = data['data']['shopInfo']['leaderImage'];
+            String leaderPhone = data['data']['shopInfo']['leaderPhone'];
             return Column(
               children: <Widget>[
                 SwiperDiy(swiper),
                 TopGridView(navigatorList),
                 AdBanner(adPic),
+                LeaderPhone(leaderPhone, leaderImgUrl),
               ],
             );
           } else {
@@ -137,5 +140,31 @@ class AdBanner extends StatelessWidget {
     return Container(
       child: Image.network(adPic),
     );
+  }
+}
+
+class LeaderPhone extends StatelessWidget {
+  final String phone;
+  final String imgUrl;
+
+  LeaderPhone(this.phone, this.imgUrl);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: InkWell(
+        onTap: _launchUrl,
+        child: Image.network(imgUrl),
+      ),
+    );
+  }
+
+  void _launchUrl() async {
+    String url = 'tel:$phone';
+    if (await canLaunch(url)) {
+      launch(url);
+    } else {
+      throw 'url不能访问，异常';
+    }
   }
 }
