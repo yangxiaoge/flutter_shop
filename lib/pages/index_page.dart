@@ -5,6 +5,7 @@ import 'home_page.dart';
 import 'category_page.dart';
 import 'cart_page.dart';
 import 'member_page.dart';
+import '../widget/appbar_gradient.dart';
 
 class IndexPage extends StatefulWidget {
   _IndexPageState createState() => _IndexPageState();
@@ -42,9 +43,7 @@ class _IndexPageState extends State<IndexPage> {
     // print(' 实际高度的 dp 与设计稿 px 的比例:${ScreenUtil.getInstance().scaleHeight}');
     return Scaffold(
         backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
-        appBar: AppBar(
-          title: Text(Constants.appName),
-        ),
+        appBar: gradientAppBar(),
         body: IndexedStack(
           //IndexedStack防止底部tabs重新加载
           children: tabPages,
@@ -62,5 +61,16 @@ class _IndexPageState extends State<IndexPage> {
             });
           },
         ));
+  }
+
+  /// 渐变色AppBar
+  Widget gradientAppBar() {
+    return GradientAppBar(
+      gradientStart: Theme.of(context).primaryColorLight,
+      gradientEnd: Theme.of(context).primaryColor,
+      //  gradientStart: Color(0xFF49A2FC), //手Q渐变色
+      //  gradientEnd: Color(0xFF2171F5),
+      title: Text(Constants.appName),
+    );
   }
 }

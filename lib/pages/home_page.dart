@@ -39,13 +39,18 @@ class _HomePageState extends State<HomePage>
             String adPic = data['data']['advertesPicture']['PICTURE_ADDRESS'];
             String leaderImgUrl = data['data']['shopInfo']['leaderImage'];
             String leaderPhone = data['data']['shopInfo']['leaderPhone'];
-            return Column(
-              children: <Widget>[
-                SwiperDiy(swiper),
-                TopGridView(navigatorList),
-                AdBanner(adPic),
-                LeaderPhone(leaderPhone, leaderImgUrl),
-              ],
+            List<Map> recommendList =
+                (data['data']['recommend'] as List).cast();
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SwiperDiy(swiper),
+                  TopGridView(navigatorList),
+                  AdBanner(adPic),
+                  LeaderPhone(leaderPhone, leaderImgUrl),
+                  Recommend(recommendList),
+                ],
+              ),
             );
           } else {
             return Center(
@@ -76,7 +81,7 @@ class SwiperDiy extends StatelessWidget {
         itemCount: swiperDataList.length,
         itemBuilder: (context, index) {
           return Image.network(
-            '${swiperDataList[index]['image']}',
+            swiperDataList[index]['image'],
             fit: BoxFit.fill,
           );
         },
@@ -101,7 +106,7 @@ class TopGridView extends StatelessWidget {
             item['image'],
             width: ScreenUtil.getInstance().setWidth(95),
           ),
-          Text('${item['mallCategoryName']}')
+          Text(item['mallCategoryName'])
         ],
       ),
     );
@@ -130,6 +135,7 @@ class TopGridView extends StatelessWidget {
   }
 }
 
+/// 横条广告
 class AdBanner extends StatelessWidget {
   final String adPic;
 
@@ -143,6 +149,7 @@ class AdBanner extends StatelessWidget {
   }
 }
 
+/// 店长电话
 class LeaderPhone extends StatelessWidget {
   final String phone;
   final String imgUrl;
@@ -159,6 +166,7 @@ class LeaderPhone extends StatelessWidget {
     );
   }
 
+  /// 拨打电话
   void _launchUrl() async {
     String url = 'tel:$phone';
     if (await canLaunch(url)) {
@@ -166,5 +174,88 @@ class LeaderPhone extends StatelessWidget {
     } else {
       throw 'url不能访问，异常';
     }
+  }
+}
+
+///商品推荐
+class Recommend extends StatelessWidget {
+  final List recommendList;
+
+  Recommend(this.recommendList);
+
+  //商品标题
+  Widget _titleWidget() {
+    return Container(
+      height: ScreenUtil.getInstance().setHeight(60),
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      //设置下边框
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(bottom: BorderSide(width: 1, color: Colors.black12))),
+      child: Text('商品推荐',
+          style: TextStyle(
+            color: Colors.pink,
+          )),
+    );
+  }
+
+  //商品子项部件
+  Widget _item(index) {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        width: ScreenUtil.getInstance().setWidth(250),
+        height: ScreenUtil.getInstance().setHeight(330),
+        padding: EdgeInsets.all(8),
+        //设置左边框
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border:
+                Border(left: BorderSide(width: 0.5, color: Colors.black12))),
+        child: Column(
+          children: <Widget>[
+            Image.network(recommendList[index]['image']),
+            Text('￥${recommendList[index]['mallPrice']}'),
+            Text(
+              '￥${recommendList[index]['price']}',
+              //文字下滑线
+              style: TextStyle(
+                  decoration: TextDecoration.lineThrough, color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //横向商品listview
+  Widget _horizontalListView() {
+    print(" recommendList.length = " + recommendList.length.toString());
+    return Container(
+      height: ScreenUtil.getInstance().setHeight(330),
+      child: ListView.builder(
+        itemCount: recommendList.length,
+        itemBuilder: (context, index) {
+          return _item(index);
+        },
+        scrollDirection: Axis.horizontal,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      //_titleWidget 高度 + _horizontalListView 高度
+      height: ScreenUtil.getInstance().setHeight(390),
+      margin: EdgeInsets.only(top: 10),
+      child: Column(
+        children: <Widget>[
+          _titleWidget(),
+          _horizontalListView(),
+        ],
+      ),
+    );
   }
 }
