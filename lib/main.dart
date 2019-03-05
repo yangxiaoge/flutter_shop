@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './pages/index_page.dart';
-import './constants/import.dart';
+import 'package:flutter_shop/pages/index_page.dart';
+import 'package:flutter_shop/constants/import.dart';
 import 'package:flutter/services.dart';
 
 void main() {

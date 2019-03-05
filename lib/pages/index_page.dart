@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../constants/import.dart';
-import 'home_page.dart';
-import 'category_page.dart';
-import 'cart_page.dart';
-import 'member_page.dart';
-import '../widget/appbar_gradient.dart';
+import 'package:flutter_shop/constants/import.dart';
+import 'package:flutter_shop/pages/home_page.dart';
+import 'package:flutter_shop/pages/category_page.dart';
+import 'package:flutter_shop/pages/cart_page.dart';
+import 'package:flutter_shop/pages/member_page.dart';
+import 'package:flutter_shop/widget/appbar_gradient.dart';
 
 class IndexPage extends StatefulWidget {
   _IndexPageState createState() => _IndexPageState();

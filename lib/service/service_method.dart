@@ -1,7 +1,7 @@
-import 'package:dio/dio.dart';
 import 'dart:async';
 import 'dart:io';
-import 'service_url.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_shop/service/service_url.dart';
 
 /// 获取首页主体内容
 Future getHomePageContent() async {
