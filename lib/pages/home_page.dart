@@ -95,7 +95,7 @@ class SwiperDiy extends StatelessWidget {
 /// 顶部分类GridView
 class TopGridView extends StatelessWidget {
   final List navigatorList;
-  Widget _gridviewItem(BuildContext context, item) {
+  Widget _gridviewItem(item) {
     return InkWell(
       onTap: () {
         print('点击了导航$item');
@@ -128,7 +128,7 @@ class TopGridView extends StatelessWidget {
         crossAxisCount: 5,
         padding: EdgeInsets.all(5.0),
         children: navigatorList.map((item) {
-          return _gridviewItem(context, item);
+          return _gridviewItem(item);
         }).toList(),
       ),
     );
@@ -231,7 +231,6 @@ class Recommend extends StatelessWidget {
 
   //横向商品listview
   Widget _horizontalListView() {
-    print(" recommendList.length = " + recommendList.length.toString());
     return Container(
       height: ScreenUtil.getInstance().setHeight(330),
       child: ListView.builder(
@@ -251,6 +250,8 @@ class Recommend extends StatelessWidget {
       height: ScreenUtil.getInstance().setHeight(390),
       margin: EdgeInsets.only(top: 10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           _titleWidget(),
           _horizontalListView(),
