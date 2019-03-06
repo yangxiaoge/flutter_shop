@@ -41,6 +41,17 @@ class _HomePageState extends State<HomePage>
             String leaderPhone = data['data']['shopInfo']['leaderPhone'];
             List<Map> recommendList =
                 (data['data']['recommend'] as List).cast();
+
+            String floor1TitleImgUrl =
+                data['data']['floor1Pic']['PICTURE_ADDRESS'];
+            List<Map> floor1Goods = (data['data']['floor1'] as List).cast();
+            String floor2TitleImgUrl =
+                data['data']['floor2Pic']['PICTURE_ADDRESS'];
+            List<Map> floor2Goods = (data['data']['floor2'] as List).cast();
+            String floor3TitleImgUrl =
+                data['data']['floor3Pic']['PICTURE_ADDRESS'];
+            List<Map> floor3Goods = (data['data']['floor3'] as List).cast();
+
             return SingleChildScrollView(
               child: Column(
                 children: <Widget>[
@@ -49,6 +60,12 @@ class _HomePageState extends State<HomePage>
                   AdBanner(adPic),
                   LeaderPhone(leaderPhone, leaderImgUrl),
                   Recommend(recommendList),
+                  FloorTitle(titleImgUrl: floor1TitleImgUrl),
+                  FloorGoodsList(floorGoods: floor1Goods),
+                  FloorTitle(titleImgUrl: floor2TitleImgUrl),
+                  FloorGoodsList(floorGoods: floor2Goods),
+                  FloorTitle(titleImgUrl: floor3TitleImgUrl),
+                  FloorGoodsList(floorGoods: floor3Goods),
                 ],
               ),
             );
@@ -256,6 +273,79 @@ class Recommend extends StatelessWidget {
           _titleWidget(),
           _horizontalListView(),
         ],
+      ),
+    );
+  }
+}
+
+///楼层标题
+class FloorTitle extends StatelessWidget {
+  final String titleImgUrl;
+
+  FloorTitle({Key key, this.titleImgUrl}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(8),
+      child: InkWell(
+        onTap: () {
+          print('点击了楼层标题');
+        },
+        child: Image.network(titleImgUrl),
+      ),
+    );
+  }
+}
+
+///楼层商品列表
+class FloorGoodsList extends StatelessWidget {
+  final List floorGoods;
+  FloorGoodsList({Key key, this.floorGoods}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          _firstRow(),
+          _secondRow(),
+        ],
+      ),
+    );
+  }
+
+  Widget _firstRow() {
+    return Row(
+      children: <Widget>[
+        _goodsItem(floorGoods[0]),
+        Column(
+          children: <Widget>[
+            _goodsItem(floorGoods[1]),
+            _goodsItem(floorGoods[2])
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _secondRow() {
+    return Row(
+      children: <Widget>[
+        _goodsItem(floorGoods[3]),
+        _goodsItem(floorGoods[4]),
+      ],
+    );
+  }
+
+  Widget _goodsItem(Map goods) {
+    return Container(
+      width: ScreenUtil.getInstance().setWidth(375), // 750 / 2,设计稿是750*1334
+      child: InkWell(
+        onTap: () {
+          print('点击了楼层商品');
+        },
+        child: Image.network(goods['image']),
       ),
     );
   }
