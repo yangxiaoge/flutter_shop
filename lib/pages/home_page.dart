@@ -39,6 +39,10 @@ class _HomePageState extends State<HomePage>
             String adPic = data['data']['advertesPicture']['PICTURE_ADDRESS'];
             String leaderImgUrl = data['data']['shopInfo']['leaderImage'];
             String leaderPhone = data['data']['shopInfo']['leaderPhone'];
+            String saomaUrl = data['data']['saoma']['PICTURE_ADDRESS'];
+            String integralMallPicUrl =
+                data['data']['integralMallPic']['PICTURE_ADDRESS'];
+            String newUserUrl = data['data']['newUser']['PICTURE_ADDRESS'];
             List<Map> recommendList =
                 (data['data']['recommend'] as List).cast();
 
@@ -59,6 +63,7 @@ class _HomePageState extends State<HomePage>
                   TopGridView(navigatorList),
                   AdBanner(adPic),
                   LeaderPhone(leaderPhone, leaderImgUrl),
+                  TicketIntegral(saomaUrl, integralMallPicUrl, newUserUrl),
                   Recommend(recommendList),
                   FloorTitle(titleImgUrl: floor1TitleImgUrl),
                   FloorGoodsList(floorGoods: floor1Goods),
@@ -161,7 +166,11 @@ class AdBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Image.network(adPic),
+      child: InkWell(
+        onTap: (){
+          print('点击了横条广告');
+        },
+        child: Image.network(adPic),),
     );
   }
 }
@@ -194,6 +203,41 @@ class LeaderPhone extends StatelessWidget {
   }
 }
 
+///领券,积分商城
+class TicketIntegral extends StatelessWidget {
+  final String saomaUrl;
+  final String integralMallPicUrl;
+  final String newUserUrl;
+
+  TicketIntegral(this.saomaUrl, this.integralMallPicUrl, this.newUserUrl);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      child: Row(
+        children: <Widget>[
+          _ticketIntetralItem(saomaUrl),
+          _ticketIntetralItem(integralMallPicUrl),
+          _ticketIntetralItem(newUserUrl),
+        ],
+      ),
+    );
+  }
+
+  Widget _ticketIntetralItem(String imgUrl) {
+    return Container(
+      width: ScreenUtil.getInstance().setWidth(250), // 750 / 3,设计稿是750*1334
+      child: InkWell(
+        onTap: () {
+          print('点击了领券,积分商城');
+        },
+        child: Image.network(imgUrl),
+      ),
+    );
+  }
+}
+
 ///商品推荐
 class Recommend extends StatelessWidget {
   final List recommendList;
@@ -205,7 +249,7 @@ class Recommend extends StatelessWidget {
     return Container(
       height: ScreenUtil.getInstance().setHeight(60),
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      padding: EdgeInsets.only(left: 10),
       //设置下边框
       decoration: BoxDecoration(
           color: Colors.white,
