@@ -85,8 +85,7 @@ class _HomePageState extends State<HomePage> {
             String integralMallPicUrl =
                 data['data']['integralMallPic']['PICTURE_ADDRESS'];
             String newUserUrl = data['data']['newUser']['PICTURE_ADDRESS'];
-            List<Map> recommendList = (data['data']['recommend'] as List).cast()
-              ..shuffle(); // shuffle, 打乱list数组
+            List<Map> recommendList = (data['data']['recommend'] as List).cast();
 
             String floor1TitleImgUrl =
                 data['data']['floor1Pic']['PICTURE_ADDRESS'];
