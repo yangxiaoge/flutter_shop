@@ -17,11 +17,11 @@ class _IndexPageState extends State<IndexPage> {
   final List<BottomNavigationBarItem> _bottomItems = [
     BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), title: Text('首页')),
     BottomNavigationBarItem(
-        icon: Icon(CupertinoIcons.search), title: Text('分类')),
+        icon: Icon(CupertinoIcons.book), title: Text('分类')),
     BottomNavigationBarItem(
         icon: Icon(CupertinoIcons.shopping_cart), title: Text('购物车')),
     BottomNavigationBarItem(
-        icon: Icon(CupertinoIcons.profile_circled), title: Text('会员中心')),
+        icon: Icon(CupertinoIcons.person), title: Text('会员中心')),
   ];
 
   final List<Widget> tabPages = [
@@ -36,11 +36,6 @@ class _IndexPageState extends State<IndexPage> {
     // 放在第一个页面初始化。设置适配尺寸 (填入设计稿中设备的屏幕尺寸) 假如设计稿是按 iPhone6 的尺寸设计的 (iPhone6 750*1334)
     ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
 
-    // print(' 设备宽度:${ScreenUtil.screenWidth}'); //Device width
-    // print(' 设备高度:${ScreenUtil.screenHeight}'); //Device height
-    // print(' 设备的像素密度:${ScreenUtil.pixelRatio}'); //Device pixel density
-    // print(' 实际宽度的 dp 与设计稿 px 的比例:${ScreenUtil.getInstance().scaleWidth}');
-    // print(' 实际高度的 dp 与设计稿 px 的比例:${ScreenUtil.getInstance().scaleHeight}');
     return Scaffold(
         backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
         appBar: gradientAppBar(),
@@ -55,7 +50,7 @@ class _IndexPageState extends State<IndexPage> {
           currentIndex: _currentIndex,
           items: _bottomItems,
           onTap: (index) {
-            print('点击了 index $index');
+            // print('点击了 index $index');
             setState(() {
               _currentIndex = index;
             });

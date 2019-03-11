@@ -2,26 +2,66 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/constants/import.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_easyrefresh/ball_pulse_header.dart';
+import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin {
-  String homePageContent = '正在获取数据';
+class _HomePageState extends State<HomePage> {
+  //FutureBuilder对应 future
+  Future _future;
+  //默认经纬度
+  var formData = {'lon': '32.162746', 'lat': '118.703763'};
+  //火爆商品页码
+  int page = 1;
+  //火爆商品list
+  List<Map> goodsList = [];
+  //listview滑动监听
+  ScrollController _controller = new ScrollController();
+  //显示floatingActionButton
+  bool _showFloatBtn = false;
 
-  //好像没有作用
-  @override
-  bool get wantKeepAlive => true;
+  GlobalKey<EasyRefreshState> _easyRefreshKey =
+      new GlobalKey<EasyRefreshState>();
+  GlobalKey<RefreshHeaderState> _headerKey =
+      new GlobalKey<RefreshHeaderState>();
+  GlobalKey<RefreshFooterState> _footerKey =
+      new GlobalKey<RefreshFooterState>();
+
+  //获取火爆商品
+  _requestHotGoods() {
+    request(homePageBelowConten, formData: page).then((goodsItem) {
+      print('page = $page');
+      setState(() {
+        //print('goodsItem = $goodsItem');
+        //先decode成json
+        var data = json.decode(goodsItem.toString());
+        goodsList.addAll((data['data'] as List).cast());
+        page++;
+      });
+    });
+  }
 
   @override
   void initState() {
-    getHomePageContent().then((data) {
-      print('首页商品信息 = $data');
-      setState(() {
-        homePageContent = data.toString();
-      });
+    //FutureBuilder 多次触发解决 https://www.jianshu.com/p/74e52aa09986
+    _future = request(homePageContent, formData: formData);
+    _requestHotGoods();
+
+        //动态显示FloatingActionButton
+    _controller.addListener(() {
+      double maxScroll = _controller.position.maxScrollExtent;
+      double pixels = _controller.position.pixels;
+      bool show = pixels >= 480;
+      //print('show = $show, _showFloatBtn = $_showFloatBtn, pixels = $pixels, maxScroll = $maxScroll');
+      if (_showFloatBtn != show) {
+        setState(() {
+          _showFloatBtn = show;
+        });
+      }
     });
     super.initState();
   }
@@ -29,13 +69,15 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
       body: FutureBuilder(
-        future: getHomePageContent(),
+        future: _future,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var data = json.decode(snapshot.data.toString());
             List<Map> swiper = (data['data']['slides'] as List).cast();
-            List<Map> navigatorList = (data['data']['category'] as List).cast();
+            List<Map> topCategoryList =
+                (data['data']['category'] as List).cast();
             String adPic = data['data']['advertesPicture']['PICTURE_ADDRESS'];
             String leaderImgUrl = data['data']['shopInfo']['leaderImage'];
             String leaderPhone = data['data']['shopInfo']['leaderPhone'];
@@ -43,8 +85,8 @@ class _HomePageState extends State<HomePage>
             String integralMallPicUrl =
                 data['data']['integralMallPic']['PICTURE_ADDRESS'];
             String newUserUrl = data['data']['newUser']['PICTURE_ADDRESS'];
-            List<Map> recommendList =
-                (data['data']['recommend'] as List).cast();
+            List<Map> recommendList = (data['data']['recommend'] as List).cast()
+              ..shuffle(); // shuffle, 打乱list数组
 
             String floor1TitleImgUrl =
                 data['data']['floor1Pic']['PICTURE_ADDRESS'];
@@ -56,11 +98,15 @@ class _HomePageState extends State<HomePage>
                 data['data']['floor3Pic']['PICTURE_ADDRESS'];
             List<Map> floor3Goods = (data['data']['floor3'] as List).cast();
 
-            return SingleChildScrollView(
-              child: Column(
+            return EasyRefresh(
+              key: _easyRefreshKey,
+              refreshHeader: BallPulseHeader(key: _headerKey),
+              refreshFooter: BallPulseFooter(key: _footerKey),
+              child: ListView(
+                controller: _controller,
                 children: <Widget>[
                   SwiperDiy(swiper),
-                  TopGridView(navigatorList),
+                  TopGridView(topCategoryList),
                   AdBanner(adPic),
                   LeaderPhone(leaderPhone, leaderImgUrl),
                   TicketIntegral(saomaUrl, integralMallPicUrl, newUserUrl),
@@ -71,8 +117,26 @@ class _HomePageState extends State<HomePage>
                   FloorGoodsList(floorGoods: floor2Goods),
                   FloorTitle(titleImgUrl: floor3TitleImgUrl),
                   FloorGoodsList(floorGoods: floor3Goods),
+                  _hotGoods(context),
                 ],
               ),
+              onRefresh: () async {
+                print('下拉刷新');
+                await Future.delayed(Duration(seconds: 1), () {
+                  setState(() {
+                    //火爆商品页码重置，集合数据清除
+                    page = 1;
+                    goodsList.clear();
+                    _requestHotGoods();
+                  });
+                });
+              },
+              loadMore: () async {
+                print('加载更多...');
+                await Future.delayed(Duration(seconds: 1), () {
+                  _requestHotGoods();
+                });
+              },
             );
           } else {
             return Center(
@@ -84,6 +148,102 @@ class _HomePageState extends State<HomePage>
           }
         },
       ),
+      floatingActionButton: _buildFloatingActionButton(),
+    );
+  }
+
+  Widget _buildFloatingActionButton() {
+    return _showFloatBtn
+        ? FloatingActionButton(
+            backgroundColor: Theme.of(context).primaryColor,
+            child: Icon(
+              Icons.keyboard_arrow_up,
+            ),
+            onPressed: () {
+              _controller.animateTo(0,
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.bounceIn);
+            })
+        : null;
+  }
+
+  ///火爆商品 title + list
+  Widget _hotGoods(context) {
+    return Column(
+      children: <Widget>[
+        _hotTitle(context),
+        _goodsList(context),
+      ],
+    );
+  }
+
+  //title
+  Widget _hotTitle(context) {
+    return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.all(5),
+      child: Text(
+        '火爆商品',
+        style: TextStyle(color: Theme.of(context).primaryColor),
+      ),
+      decoration: BoxDecoration(
+          color: Color.fromRGBO(244, 245, 245, 1.0),
+          border:
+              Border(bottom: BorderSide(width: 0.5, color: Colors.black12))),
+    );
+  }
+
+  //火爆商品list
+  Widget _goodsList(context) {
+    return Wrap(
+      children: goodsList.map((itemMap) {
+        return InkWell(
+          onTap: () {
+            print('火爆商品item$itemMap');
+          },
+          child: Container(
+            width: ScreenUtil.getInstance().setWidth(375),
+            color: Colors.white,
+            padding: EdgeInsets.all(5),
+            // margin: EdgeInsets.only(bottom: 3),
+            child: Column(
+              children: <Widget>[
+                Image.network(
+                  itemMap['image'],
+                  width: ScreenUtil().setWidth(375),
+                ),
+                Text(
+                  itemMap['name'],
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: ScreenUtil.getInstance().setSp(26)),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    children: <Widget>[
+                      Text('￥${itemMap['mallPrice']}'),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            '￥${itemMap['price']}',
+                            style: TextStyle(
+                                color: Colors.black26,
+                                decoration: TextDecoration.lineThrough),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
@@ -147,6 +307,8 @@ class TopGridView extends StatelessWidget {
       height: ScreenUtil.getInstance().setHeight(320),
       padding: EdgeInsets.all(3.0),
       child: GridView.count(
+        //关闭滑动效果
+        physics: NeverScrollableScrollPhysics(),
         crossAxisCount: 5,
         padding: EdgeInsets.all(5.0),
         children: navigatorList.map((item) {
@@ -167,10 +329,11 @@ class AdBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: InkWell(
-        onTap: (){
+        onTap: () {
           print('点击了横条广告');
         },
-        child: Image.network(adPic),),
+        child: Image.network(adPic),
+      ),
     );
   }
 }
