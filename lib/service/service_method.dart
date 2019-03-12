@@ -3,15 +3,18 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_shop/service/service_url.dart';
 
+Dio dio = Dio()
+  ..options.connectTimeout = 5000
+  ..options.receiveTimeout = 5000
+  ..options.contentType =
+      ContentType.parse('application/x-www-form-urlencoded');
+
 ///统一请求封装
 Future request(String urlKey, {formData}) async {
   try {
     print('开始获取${getServiceName(urlKey)}数据.......');
 
     Response response;
-    Dio dio = Dio();
-    dio.options.contentType =
-        ContentType.parse('application/x-www-form-urlencoded');
     if (formData == null) {
       response = await dio.post(servicePath[urlKey]);
     } else {
@@ -32,9 +35,6 @@ Future getHomePageContent() async {
   try {
     print('开始获取首页数据.......');
     Response response;
-    Dio dio = Dio();
-    dio.options.contentType =
-        ContentType.parse('application/x-www-form-urlencoded');
     var formData = {'lon': '32.162746', 'lat': '118.703763'};
     response = await dio.post(servicePath[homePageContent], data: formData);
     if (response.statusCode == 200) {
@@ -52,9 +52,6 @@ Future getHomePageBelowConten() async {
   try {
     print('商店首页火爆商品.......');
     Response response;
-    Dio dio = Dio();
-    dio.options.contentType =
-        ContentType.parse('application/x-www-form-urlencoded');
     int page = 1;
     response = await dio.post(servicePath[homePageBelowConten], data: page);
     if (response.statusCode == 200) {
@@ -72,9 +69,6 @@ Future getCategory() async {
   try {
     print('商店首页火爆商品.......');
     Response response;
-    Dio dio = Dio();
-    dio.options.contentType =
-        ContentType.parse('application/x-www-form-urlencoded');
     var formData = {'lon': '32.162746', 'lat': '118.703763'};
     response = await dio.post(servicePath[category], data: formData);
     if (response.statusCode == 200) {
