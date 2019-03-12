@@ -8,15 +8,25 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  //FutureBuilder对应 future
+  Future _future;
   //当前一级分类选中的下标
   int _selectCategoryIndex = 0;
   //当前二级分类选中的下标
   int _selectSecondCategoryIndex = 0;
+
+  @override
+  void initState() {
+    //FutureBuilder 多次触发解决 https://www.jianshu.com/p/74e52aa09986
+    _future = request(category);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: request(category),
+        future: _future,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var data = json.decode(snapshot.data.toString());
