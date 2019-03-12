@@ -13,11 +13,11 @@ class IndexPage extends StatefulWidget {
 
 class _IndexPageState extends State<IndexPage> {
   int _currentIndex = 0;
+  String _currentTitle = '首页';
 
   final List<BottomNavigationBarItem> _bottomItems = [
     BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), title: Text('首页')),
-    BottomNavigationBarItem(
-        icon: Icon(CupertinoIcons.book), title: Text('分类')),
+    BottomNavigationBarItem(icon: Icon(CupertinoIcons.book), title: Text('分类')),
     BottomNavigationBarItem(
         icon: Icon(CupertinoIcons.shopping_cart), title: Text('购物车')),
     BottomNavigationBarItem(
@@ -53,6 +53,11 @@ class _IndexPageState extends State<IndexPage> {
             // print('点击了 index $index');
             setState(() {
               _currentIndex = index;
+
+              String textTitle = _bottomItems[index].title.toString();
+              int first = textTitle.indexOf('\"');
+              int second = textTitle.lastIndexOf('\"');
+              _currentTitle = textTitle.substring(first + 1, second);
             });
           },
         ));
@@ -61,11 +66,12 @@ class _IndexPageState extends State<IndexPage> {
   /// 渐变色AppBar
   Widget gradientAppBar() {
     return GradientAppBar(
-      gradientStart: Theme.of(context).primaryColorLight,
+      gradientStart: Color(0xFF49A2FC),
       gradientEnd: Theme.of(context).primaryColor,
       //  gradientStart: Color(0xFF49A2FC), //手Q渐变色
       //  gradientEnd: Color(0xFF2171F5),
-      title: Text(Constants.appName),
+      title: Text(_currentTitle),
+      centerTitle: true,
     );
   }
 }
