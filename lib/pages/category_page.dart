@@ -35,10 +35,10 @@ class _CategoryPageState extends State<CategoryPage> {
                 (data['data'][0]['bxMallSubDto'] as List).cast();
             return Row(
               children: <Widget>[
-                firstGoodsCategory(cat),
+                leftCategoryNav(cat),
                 Column(
                   children: <Widget>[
-                    secondGoodsCatefory(defaultSecondCat),
+                    topCateforyNav(defaultSecondCat),
                     Text('哈哈哈'),
                     //todo商品列表
                   ],
@@ -59,7 +59,7 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   //商品一级分类
-  Widget firstGoodsCategory(List goodsCategory) {
+  Widget leftCategoryNav(List goodsCategory) {
     Widget _divider = Divider(
       color: Colors.black12,
       height: 1,
@@ -101,7 +101,7 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   //商品二级分类
-  Widget secondGoodsCatefory(List secondCat) {
+  Widget topCateforyNav(List secondCat) {
     return Container(
       width: ScreenUtil().setWidth(563),
       height: ScreenUtil().setHeight(90),
