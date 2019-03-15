@@ -2,100 +2,34 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/constants/import.dart';
+import 'package:flutter_shop/model/CategoryModel.dart';
 
 class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  //FutureBuilder对应 future
-  Future _future;
   //当前一级分类选中的下标
   int _selectCategoryIndex = 0;
   //当前二级分类选中的下标
   int _selectSecondCategoryIndex = 0;
 
   @override
-  void initState() {
-    //FutureBuilder 多次触发解决 https://www.jianshu.com/p/74e52aa09986
-    _future = request(category);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: _future,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            var data = json.decode(snapshot.data.toString());
-            List<Map> cat = (data['data'] as List).cast();
-            List<Map> defaultSecondCat =
-                (data['data'][0]['bxMallSubDto'] as List).cast();
-            return Row(
+      body: Container(
+        child: Row(
+          children: <Widget>[
+            LeftCategoryNav(),
+            Column(
               children: <Widget>[
-                leftCategoryNav(cat),
-                Column(
-                  children: <Widget>[
-                    topCateforyNav(defaultSecondCat),
-                    Text('哈哈哈'),
-                    //todo商品列表
-                  ],
-                )
+                // topCateforyNav(defaultSecondCat),
+                Text('哈哈哈'),
+                //todo商品列表
               ],
-            );
-          } else {
-            return Center(
-              child: Text(
-                '加载中...',
-                style: TextStyle(fontSize: ScreenUtil.getInstance().setSp(28)),
-              ),
-            );
-          }
-        },
-      ),
-    );
-  }
-
-  //商品一级分类
-  Widget leftCategoryNav(List goodsCategory) {
-    Widget _divider = Divider(
-      color: Colors.black12,
-      height: 1,
-    );
-    return Container(
-      decoration: BoxDecoration(
-          border: Border(right: BorderSide(color: Colors.black12, width: 1))),
-      width: ScreenUtil.getInstance().setWidth(187), //750/4 = 187.5
-      child: ListView.separated(
-        shrinkWrap: true,
-        primary: true,
-        itemCount: goodsCategory.length,
-        itemBuilder: (context, index) {
-          return Container(
-            color: _selectCategoryIndex == index ? Colors.black12 : null,
-            child: ListTile(
-              // selected: _selectCategoryIndex == index,
-              title: Text(
-                goodsCategory[index]['mallCategoryName'],
-                style: TextStyle(
-                  fontSize: ScreenUtil.getInstance().setSp(28),
-                ),
-              ),
-              onTap: () {
-                if (_selectCategoryIndex != index) {
-                  setState(() {
-                    _selectCategoryIndex = index;
-                  });
-                }
-              },
-            ),
-          );
-        },
-        separatorBuilder: (context, index) {
-          return _divider;
-        },
+            )
+          ],
+        ),
       ),
     );
   }
@@ -141,5 +75,62 @@ class _CategoryPageState extends State<CategoryPage> {
         },
       ),
     );
+  }
+}
+
+///左侧商品分类
+class LeftCategoryNav extends StatefulWidget {
+  @override
+  _LeftCategoryNavState createState() => _LeftCategoryNavState();
+}
+
+class _LeftCategoryNavState extends State<LeftCategoryNav> {
+  List<Data> list = [];
+
+  void initState() {
+    super.initState();
+    _getCategory();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: ScreenUtil.getInstance().setWidth(200),
+      child: ListView.separated(
+        itemCount: list.length,
+        itemBuilder: (context, index) => _leftInkWellItem(index),
+        separatorBuilder: (context, index) => Divider(
+              color: Colors.black12,
+              height: 1,
+            ),
+      ),
+    );
+  }
+
+  Widget _leftInkWellItem(index) {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border(right: BorderSide(width: 0.5, color: Colors.black12))),
+        height: ScreenUtil().setHeight(100),
+        padding: EdgeInsets.only(left: 8),
+        alignment: Alignment.centerLeft,
+        child: Text(
+          list[index].mallCategoryName,
+          style: TextStyle(fontSize: ScreenUtil.getInstance().setSp(30)),
+        ),
+      ),
+    );
+  }
+
+  void _getCategory() async {
+    request(category).then((val) {
+      var data = json.decode(val.toString());
+      CategoryModel categoryModel = CategoryModel.fromJson(data);
+      setState(() {
+        list = categoryModel.data;
+      });
+    });
   }
 }
