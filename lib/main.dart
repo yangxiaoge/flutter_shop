@@ -7,7 +7,15 @@ void main() {
   /// 强制竖屏
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(MyApp());
+
+  var childCategory = ChildCategoryProvide();
+  var provides = Providers();
+  provides..provide(Provider<ChildCategoryProvide>.value(childCategory));
+
+  runApp(ProviderNode(
+    providers: provides,
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

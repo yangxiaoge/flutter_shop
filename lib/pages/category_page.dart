@@ -2,18 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/constants/import.dart';
-import 'package:flutter_shop/model/CategoryModel.dart';
+import 'package:flutter_shop/model/category_model.dart';
 
 class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  //当前一级分类选中的下标
-  int _selectCategoryIndex = 0;
-  //当前二级分类选中的下标
-  int _selectSecondCategoryIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,56 +18,13 @@ class _CategoryPageState extends State<CategoryPage> {
             LeftCategoryNav(),
             Column(
               children: <Widget>[
-                // topCateforyNav(defaultSecondCat),
+                RightTopCategoryNav(),
                 Text('哈哈哈'),
                 //todo商品列表
               ],
             )
           ],
         ),
-      ),
-    );
-  }
-
-  //商品二级分类
-  Widget topCateforyNav(List secondCat) {
-    return Container(
-      width: ScreenUtil().setWidth(563),
-      height: ScreenUtil().setHeight(90),
-      decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.black12, width: 1))),
-      child: ListView.builder(
-        shrinkWrap: true,
-        primary: true,
-        scrollDirection: Axis.horizontal,
-        itemCount: secondCat.length,
-        itemBuilder: (context, index) {
-          return Container(
-            width: ScreenUtil.getInstance().setWidth(150),
-            child: ListTile(
-              contentPadding: EdgeInsets.all(0),
-              selected: _selectSecondCategoryIndex == index,
-              onTap: () {
-                if (_selectSecondCategoryIndex != index) {
-                  setState(() {
-                    _selectSecondCategoryIndex = index;
-                  });
-                }
-              },
-              title: Center(
-                child: Container(
-                  child: Text(
-                    secondCat[index]['mallSubName'],
-                    style: TextStyle(
-                      fontSize: ScreenUtil.getInstance().setSp(26),
-                    ),
-                  ),
-                  color: Colors.red,
-                ),
-              ),
-            ),
-          );
-        },
       ),
     );
   }
@@ -86,6 +38,8 @@ class LeftCategoryNav extends StatefulWidget {
 
 class _LeftCategoryNavState extends State<LeftCategoryNav> {
   List<Data> list = [];
+  //当前左侧分类选中的下标
+  int _selectLeftCategoryIndex = 0;
 
   void initState() {
     super.initState();
@@ -109,10 +63,23 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
 
   Widget _leftInkWellItem(index) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        //更新子分类（右上角商品分类）
+        var childLsit = list[index].bxMallSubDto;
+        Provide.value<ChildCategoryProvide>(context)
+            .getChildCategory(childLsit);
+
+        setState(() {
+          _selectLeftCategoryIndex = index;
+        });
+      },
       child: Container(
         decoration: BoxDecoration(
-            border: Border(right: BorderSide(width: 0.5, color: Colors.black12))),
+            color: _selectLeftCategoryIndex == index
+                ? Colors.black12
+                : Colors.white,
+            border:
+                Border(right: BorderSide(width: 0.5, color: Colors.black12))),
         height: ScreenUtil().setHeight(100),
         padding: EdgeInsets.only(left: 8),
         alignment: Alignment.centerLeft,
@@ -132,5 +99,56 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
         list = categoryModel.data;
       });
     });
+  }
+}
+
+///右上角商品分类
+class RightTopCategoryNav extends StatefulWidget {
+  @override
+  __RightTopCategoryNavState createState() => __RightTopCategoryNavState();
+}
+
+class __RightTopCategoryNavState extends State<RightTopCategoryNav> {
+  //当前右上角分类选中的下标
+  int _selectRightCategoryIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: ScreenUtil().setWidth(550),
+      height: ScreenUtil().setHeight(90),
+      child: Provide<ChildCategoryProvide>(
+        builder: (context, child, childCategory) => ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: childCategory.childCategoryList.length,
+              itemBuilder: (context, index) => _rightInkWellItem(
+                  index, childCategory.childCategoryList[index]),
+            ),
+      ),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(bottom: BorderSide(color: Colors.black12, width: 1))),
+    );
+  }
+
+  Widget _rightInkWellItem(int index, BxMallSubDto item) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _selectRightCategoryIndex = index;
+        });
+      },
+      child: Container(
+        color:
+            _selectRightCategoryIndex == index ? Colors.black12 : Colors.white,
+        padding: EdgeInsets.symmetric(
+          horizontal: 5,
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          item.mallSubName,
+          style: TextStyle(fontSize: ScreenUtil.getInstance().setSp(30)),
+        ),
+      ),
+    );
   }
 }

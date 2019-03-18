@@ -244,13 +244,6 @@ class _GradientAppBarState extends State<GradientAppBar> {
       );
     }
 
-    final Brightness brightness = widget.brightness ??
-        appBarTheme.brightness ??
-        themeData.primaryColorBrightness;
-    final SystemUiOverlayStyle overlayStyle = brightness == Brightness.dark
-        ? SystemUiOverlayStyle.light
-        : SystemUiOverlayStyle.dark;
-
     return Material(
       color: widget.gradientStart != null && widget.gradientEnd != null
           ? Colors.transparent
