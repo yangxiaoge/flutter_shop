@@ -51,12 +51,10 @@ class _HomePageState extends State<HomePage> {
     _future = request(homePageContent, formData: formData);
     _requestHotGoods();
 
-        //动态显示FloatingActionButton
+    //动态显示FloatingActionButton
     _controller.addListener(() {
-      double maxScroll = _controller.position.maxScrollExtent;
       double pixels = _controller.position.pixels;
       bool show = pixels >= 480;
-      //print('show = $show, _showFloatBtn = $_showFloatBtn, pixels = $pixels, maxScroll = $maxScroll');
       if (_showFloatBtn != show) {
         setState(() {
           _showFloatBtn = show;

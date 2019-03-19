@@ -67,11 +67,18 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
         //更新子分类（右上角商品分类）
         var childLsit = list[index].bxMallSubDto;
         Provide.value<ChildCategoryProvide>(context)
-            .getChildCategory(childLsit);
+            .setChildCategory(childLsit);
 
         setState(() {
           _selectLeftCategoryIndex = index;
         });
+
+        //右上角分类下标重置
+        _selectRightCategoryIndex = 0;
+
+        //右上角分类滚动到下标0位置
+        _controller.animateTo(0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -98,9 +105,18 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
       setState(() {
         list = categoryModel.data;
       });
+      //设置右上角分类默认项
+      Provide.value<ChildCategoryProvide>(context)
+          .setChildCategory(list[0].bxMallSubDto);
     });
   }
 }
+
+///当前右上角商品分类选中的下标
+int _selectRightCategoryIndex = 0;
+
+///右上角商品分类滚动监听
+ScrollController _controller = new ScrollController();
 
 ///右上角商品分类
 class RightTopCategoryNav extends StatefulWidget {
@@ -109,20 +125,27 @@ class RightTopCategoryNav extends StatefulWidget {
 }
 
 class __RightTopCategoryNavState extends State<RightTopCategoryNav> {
-  //当前右上角分类选中的下标
-  int _selectRightCategoryIndex = 0;
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: ScreenUtil().setWidth(550),
       height: ScreenUtil().setHeight(90),
       child: Provide<ChildCategoryProvide>(
-        builder: (context, child, childCategory) => ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: childCategory.childCategoryList.length,
-              itemBuilder: (context, index) => _rightInkWellItem(
-                  index, childCategory.childCategoryList[index]),
-            ),
+        builder: (context, child, childCategory) {
+          return ListView.builder(
+            controller: _controller,
+            scrollDirection: Axis.horizontal,
+            itemCount: childCategory.childCategoryList.length,
+            itemBuilder: (context, index) => _rightInkWellItem(
+                index, childCategory.childCategoryList[index]),
+          );
+        },
       ),
       decoration: BoxDecoration(
           color: Colors.white,
@@ -138,16 +161,18 @@ class __RightTopCategoryNavState extends State<RightTopCategoryNav> {
         });
       },
       child: Container(
-        color:
-            _selectRightCategoryIndex == index ? Colors.black12 : Colors.white,
+        color: Colors.white,
         padding: EdgeInsets.symmetric(
           horizontal: 5,
         ),
         alignment: Alignment.center,
-        child: Text(
-          item.mallSubName,
-          style: TextStyle(fontSize: ScreenUtil.getInstance().setSp(30)),
-        ),
+        child: Text(item.mallSubName,
+            style: TextStyle(
+              fontSize: ScreenUtil.getInstance().setSp(30),
+              color: _selectRightCategoryIndex == index
+                  ? Theme.of(context).primaryColor
+                  : Colors.black,
+            )),
       ),
     );
   }
