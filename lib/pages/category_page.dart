@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shop/constants/import.dart';
 import 'package:flutter_shop/model/category_model.dart';
 
-class CategoryPage extends StatefulWidget {
-  _CategoryPageState createState() => _CategoryPageState();
-}
-
-class _CategoryPageState extends State<CategoryPage> {
+class CategoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +60,10 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
   Widget _leftInkWellItem(index) {
     return InkWell(
       onTap: () {
+        //同一个tab多次点击忽略不处理
+        if (_selectLeftCategoryIndex == index) {
+          return;
+        }
         //更新子分类（右上角商品分类）
         var childLsit = list[index].bxMallSubDto;
         Provide.value<ChildCategoryProvide>(context)

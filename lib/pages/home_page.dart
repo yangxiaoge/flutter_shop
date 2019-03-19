@@ -34,9 +34,9 @@ class _HomePageState extends State<HomePage> {
   //获取火爆商品
   _requestHotGoods() {
     request(homePageBelowConten, formData: page).then((goodsItem) {
-      print('page = $page');
+      debugPrint('page = $page');
       setState(() {
-        //print('goodsItem = $goodsItem');
+        //debugPrint('goodsItem = $goodsItem');
         //先decode成json
         var data = json.decode(goodsItem.toString());
         goodsList.addAll((data['data'] as List).cast());
@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                   TopGridView(topCategoryList),
                   AdBanner(adPic),
                   LeaderPhone(leaderPhone, leaderImgUrl),
-                  TicketIntegral(saomaUrl, integralMallPicUrl, newUserUrl),
+                  //TicketIntegral(saomaUrl, integralMallPicUrl, newUserUrl),
                   Recommend(recommendList),
                   FloorTitle(titleImgUrl: floor1TitleImgUrl),
                   FloorGoodsList(floorGoods: floor1Goods),
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               onRefresh: () async {
-                print('下拉刷新');
+                debugPrint('下拉刷新');
                 await Future.delayed(Duration(seconds: 1), () {
                   setState(() {
                     //火爆商品页码重置，集合数据清除
@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                 });
               },
               loadMore: () async {
-                print('加载更多...');
+                debugPrint('加载更多...');
                 await Future.delayed(Duration(seconds: 1), () {
                   _requestHotGoods();
                 });
@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage> {
       children: goodsList.map((itemMap) {
         return InkWell(
           onTap: () {
-            print('火爆商品item$itemMap');
+            debugPrint('火爆商品item$itemMap');
           },
           child: Container(
             width: ScreenUtil.getInstance().setWidth(375),
@@ -277,7 +277,7 @@ class TopGridView extends StatelessWidget {
   Widget _gridviewItem(item) {
     return InkWell(
       onTap: () {
-        print('点击了导航$item');
+        debugPrint('点击了导航$item');
       },
       child: Column(
         children: <Widget>[
@@ -327,7 +327,7 @@ class AdBanner extends StatelessWidget {
     return Container(
       child: InkWell(
         onTap: () {
-          print('点击了横条广告');
+          debugPrint('点击了横条广告');
         },
         child: Image.network(adPic),
       ),
@@ -390,7 +390,7 @@ class TicketIntegral extends StatelessWidget {
       width: ScreenUtil.getInstance().setWidth(250), // 750 / 3,设计稿是750*1334
       child: InkWell(
         onTap: () {
-          print('点击了领券,积分商城');
+          debugPrint('点击了领券,积分商城');
         },
         child: Image.network(imgUrl),
       ),
@@ -494,7 +494,7 @@ class FloorTitle extends StatelessWidget {
       margin: EdgeInsets.all(8),
       child: InkWell(
         onTap: () {
-          print('点击了楼层标题');
+          debugPrint('点击了楼层标题');
         },
         child: Image.network(titleImgUrl),
       ),
@@ -547,7 +547,7 @@ class FloorGoodsList extends StatelessWidget {
       width: ScreenUtil.getInstance().setWidth(375), // 750 / 2,设计稿是750*1334
       child: InkWell(
         onTap: () {
-          print('点击了楼层商品');
+          debugPrint('点击了楼层商品');
         },
         child: Image.network(goods['image']),
       ),
