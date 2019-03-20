@@ -15,8 +15,7 @@ class CategoryPage extends StatelessWidget {
             Column(
               children: <Widget>[
                 RightTopCategoryNav(),
-                Text('哈哈哈'),
-                //todo商品列表
+                MallGoodsList(),
               ],
             )
           ],
@@ -64,17 +63,16 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
         if (_selectLeftCategoryIndex == index) {
           return;
         }
-        //更新子分类（右上角商品分类）
-        var childLsit = list[index].bxMallSubDto;
-        Provide.value<ChildCategoryProvide>(context)
-            .setChildCategory(childLsit);
-
         setState(() {
           _selectLeftCategoryIndex = index;
         });
 
         //右上角分类下标重置
         _selectRightCategoryIndex = 0;
+        //更新右上角商品分类
+        var childLsit = list[index].bxMallSubDto;
+        Provide.value<ChildCategoryProvide>(context)
+            .setChildCategory(childLsit);
 
         //右上角分类滚动到下标0位置
         _controller.animateTo(0,
@@ -99,15 +97,18 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
   }
 
   void _getCategory() async {
-    request(category).then((val) {
+    await request(category).then((val) {
       var data = json.decode(val.toString());
       CategoryModel categoryModel = CategoryModel.fromJson(data);
       setState(() {
         list = categoryModel.data;
       });
-      //设置右上角分类默认项
-      Provide.value<ChildCategoryProvide>(context)
-          .setChildCategory(list[0].bxMallSubDto);
+
+      Future.delayed(Duration(milliseconds: 20)).then((_) {
+        //设置右上角分类默认项
+        Provide.value<ChildCategoryProvide>(context)
+            .setChildCategory(list[0].bxMallSubDto);
+      });
     });
   }
 }
@@ -133,23 +134,22 @@ class __RightTopCategoryNavState extends State<RightTopCategoryNav> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: ScreenUtil().setWidth(550),
-      height: ScreenUtil().setHeight(90),
-      child: Provide<ChildCategoryProvide>(
-        builder: (context, child, childCategory) {
-          return ListView.builder(
-            controller: _controller,
-            scrollDirection: Axis.horizontal,
-            itemCount: childCategory.childCategoryList.length,
-            itemBuilder: (context, index) => _rightInkWellItem(
-                index, childCategory.childCategoryList[index]),
-          );
-        },
-      ),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(bottom: BorderSide(color: Colors.black12, width: 1))),
+    return Provide<ChildCategoryProvide>(
+      builder: (context, child, childCategory) => Container(
+            width: ScreenUtil().setWidth(550),
+            height: ScreenUtil().setHeight(90),
+            child: ListView.builder(
+              controller: _controller,
+              scrollDirection: Axis.horizontal,
+              itemCount: childCategory.childCategoryList.length,
+              itemBuilder: (context, index) => _rightInkWellItem(
+                  index, childCategory.childCategoryList[index]),
+            ),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                    bottom: BorderSide(color: Colors.black12, width: 1))),
+          ),
     );
   }
 
@@ -174,6 +174,112 @@ class __RightTopCategoryNavState extends State<RightTopCategoryNav> {
                   : Colors.black,
             )),
       ),
+    );
+  }
+}
+
+///商品列表
+class MallGoodsList extends StatefulWidget {
+  @override
+  _MallGoodsListState createState() => _MallGoodsListState();
+}
+
+class _MallGoodsListState extends State<MallGoodsList> {
+  int pageIndex = 1;
+  List goodsList = [];
+
+  _getGoodsList() async {
+    //categoryId: 大类 ID，字符串类型
+    //categorySubId : 子类 ID，字符串类型，如果没有可以填写空字符串，例如 ''
+    //page: 分页的页数，int 类型
+    var formData = {
+      'categoryId': '4',
+      'categorySubId': '2c9f6c94621970a801626a35cb4d0175',
+      'page': pageIndex
+    };
+    await request(getMallGoods, formData: formData).then((val) {
+      var data = json.decode(val.toString());
+      // debugPrint('商品列表-------->$data');
+      setState(() {
+        goodsList.addAll((data['data'] as List).cast());
+        pageIndex++;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getGoodsList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: ScreenUtil.getInstance().setWidth(550),
+      height: ScreenUtil.getInstance().setHeight(954),
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        children: <Widget>[_goodsList()],
+      ),
+    );
+  }
+
+  Widget _goodsList() {
+    return Wrap(
+      children: goodsList.map((itemMap) {
+        return InkWell(
+          onTap: () {
+            debugPrint('火爆商品item$itemMap');
+          },
+          child: Container(
+            width: ScreenUtil.getInstance().setWidth(275),
+            color: Colors.white,
+            padding: EdgeInsets.all(5),
+            // margin: EdgeInsets.only(bottom: 3),
+            child: Column(
+              children: <Widget>[
+                Image.network(
+                  itemMap['image'],
+                  width: ScreenUtil().setWidth(275),
+                ),
+                Text(
+                  itemMap['goodsName'],
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: ScreenUtil.getInstance().setSp(24)),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '￥${itemMap['oriPrice']}',
+                        style: TextStyle(
+                            fontSize: ScreenUtil.getInstance().setSp(24)),
+                      ),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            '￥${itemMap['presentPrice']}',
+                            style: TextStyle(
+                                color: Colors.black26,
+                                fontSize: ScreenUtil.getInstance().setSp(24),
+                                decoration: TextDecoration.lineThrough),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
