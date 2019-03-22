@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/constants/import.dart';
-import 'package:flutter_shop/model/category_model.dart';
 
 class CategoryPage extends StatelessWidget {
   @override
@@ -39,6 +38,8 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
   void initState() {
     super.initState();
     _getCategory();
+    //为了第一次能加载商品列表
+    _getGoodsList();
   }
 
   @override
@@ -69,14 +70,17 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
 
         //右上角分类下标重置
         _selectRightCategoryIndex = 0;
-        //更新右上角商品分类
         var childLsit = list[index].bxMallSubDto;
+        var categoryId = list[index].mallCategoryId;
+        //更新右上角商品分类
         Provide.value<ChildCategoryProvide>(context)
             .setChildCategory(childLsit);
 
         //右上角分类滚动到下标0位置
         _controller.animateTo(0,
             duration: Duration(milliseconds: 200), curve: Curves.ease);
+        //商品列表请求
+        _getGoodsList(categoryId: categoryId);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -104,11 +108,29 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
         list = categoryModel.data;
       });
 
-      Future.delayed(Duration(milliseconds: 20)).then((_) {
-        //设置右上角分类默认项
-        Provide.value<ChildCategoryProvide>(context)
-            .setChildCategory(list[0].bxMallSubDto);
-      });
+      //设置右上角分类默认项
+      Provide.value<ChildCategoryProvide>(context)
+          .setChildCategory(list[0].bxMallSubDto);
+    });
+  }
+
+  _getGoodsList({String categoryId}) async {
+    //categoryId: 大类 ID，字符串类型
+    //categorySubId : 子类 ID，字符串类型，如果没有可以填写空字符串，例如 ''
+    //page: 分页的页数，int 类型
+    var formData = {
+      'categoryId': categoryId ?? '4',
+      'categorySubId': '',
+      'page': 1
+    };
+    await request(getMallGoods, formData: formData).then((val) {
+      var data = json.decode(val.toString());
+      // debugPrint('商品列表-------->$data');
+      CategoryGoodsListModel categoryGoodsListModel =
+          CategoryGoodsListModel.fromJson(data);
+      //provide通知刷新商品列表
+      Provide.value<CategoryGoodsListProvide>(context)
+          .setCategoryGoodsList(categoryGoodsListModel.data);
     });
   }
 }
@@ -186,67 +208,44 @@ class MallGoodsList extends StatefulWidget {
 
 class _MallGoodsListState extends State<MallGoodsList> {
   int pageIndex = 1;
-  List goodsList = [];
-
-  _getGoodsList() async {
-    //categoryId: 大类 ID，字符串类型
-    //categorySubId : 子类 ID，字符串类型，如果没有可以填写空字符串，例如 ''
-    //page: 分页的页数，int 类型
-    var formData = {
-      'categoryId': '4',
-      'categorySubId': '2c9f6c94621970a801626a35cb4d0175',
-      'page': pageIndex
-    };
-    await request(getMallGoods, formData: formData).then((val) {
-      var data = json.decode(val.toString());
-      // debugPrint('商品列表-------->$data');
-      setState(() {
-        goodsList.addAll((data['data'] as List).cast());
-        pageIndex++;
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getGoodsList();
-  }
+  // List<CategoryListData> goodsList = [];
 
   @override
   Widget build(BuildContext context) {
-    return Expanded( //高度自动展开，不需要设置Container的height
-      child: Container(
-        width: ScreenUtil.getInstance().setWidth(550),
-        // height: ScreenUtil.getInstance().setHeight(954),
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: <Widget>[_goodsList()],
-        ),
-      ),
+    return Provide<CategoryGoodsListProvide>(
+      builder: (context, _, data) {
+        return Expanded(
+          child: Container(
+            width: ScreenUtil.getInstance().setWidth(550),
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: <Widget>[_goodsList(data.childCategoryGoodsList)],
+            ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _goodsList() {
+  Widget _goodsList(List goodsList) {
     return Wrap(
-      children: goodsList.map((itemMap) {
+      children: goodsList.map((goodsItem) {
         return InkWell(
           onTap: () {
-            debugPrint('火爆商品item$itemMap');
+            debugPrint('火爆商品item: ${goodsItem.goodsName}');
           },
           child: Container(
             width: ScreenUtil.getInstance().setWidth(275),
             color: Colors.white,
             padding: EdgeInsets.all(5),
-            // margin: EdgeInsets.only(bottom: 3),
             child: Column(
               children: <Widget>[
                 Image.network(
-                  itemMap['image'],
+                  goodsItem.image,
                   width: ScreenUtil().setWidth(275),
                 ),
                 Text(
-                  itemMap['goodsName'],
+                  goodsItem.goodsName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -258,7 +257,7 @@ class _MallGoodsListState extends State<MallGoodsList> {
                   child: Row(
                     children: <Widget>[
                       Text(
-                        '￥${itemMap['oriPrice']}',
+                        '￥${goodsItem.oriPrice}',
                         style: TextStyle(
                             fontSize: ScreenUtil.getInstance().setSp(24)),
                       ),
@@ -266,7 +265,7 @@ class _MallGoodsListState extends State<MallGoodsList> {
                         child: Container(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            '￥${itemMap['presentPrice']}',
+                            '￥${goodsItem.presentPrice}',
                             style: TextStyle(
                                 color: Colors.black26,
                                 fontSize: ScreenUtil.getInstance().setSp(24),

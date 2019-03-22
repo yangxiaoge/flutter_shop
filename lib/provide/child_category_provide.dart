@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/model/category_model.dart';
-
+///分类页 - 子分类provide
 class ChildCategoryProvide extends ChangeNotifier {
   List<BxMallSubDto> childCategoryList = [];
 

@@ -9,8 +9,11 @@ void main() {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   var childCategory = ChildCategoryProvide();
+  var categoryGoodsList = CategoryGoodsListProvide();
   var provides = Providers();
-  provides..provide(Provider<ChildCategoryProvide>.value(childCategory));
+  provides
+    ..provide(Provider<ChildCategoryProvide>.value(childCategory))
+    ..provide(Provider<CategoryGoodsListProvide>.value(categoryGoodsList));
 
   runApp(ProviderNode(
     providers: provides,

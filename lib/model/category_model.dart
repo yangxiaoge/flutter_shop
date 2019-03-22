@@ -1,5 +1,6 @@
 /// json to dart 对象快速生成
 /// https://javiercbk.github.io/json_to_dart/
+/// 分类页模型
 class CategoryModel {
   String code;
   String message;
