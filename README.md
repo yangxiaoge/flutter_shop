@@ -1,6 +1,13 @@
 # flutter_shop
 
-A new Flutter project.
+
+百姓生活+ - Flutter版
+
+## 应用截图
+
+| ![home](screen_shot/home.png) | ![home](screen_shot/home1.png) | ![home](screen_shot/home2.png) | ![category](screen_shot/category.png) | ![category](screen_shot/category1.png) |
+| :--: | :--: | :--: | :--: | :--: |
+| 首页 | 首页 | 首页 | 分类 | 分类|
 
 ## Getting Started
 
