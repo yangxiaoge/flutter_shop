@@ -215,12 +215,14 @@ class _MallGoodsListState extends State<MallGoodsList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: ScreenUtil.getInstance().setWidth(550),
-      height: ScreenUtil.getInstance().setHeight(954),
-      child: ListView(
-        scrollDirection: Axis.vertical,
-        children: <Widget>[_goodsList()],
+    return Expanded( //高度自动展开，不需要设置Container的height
+      child: Container(
+        width: ScreenUtil.getInstance().setWidth(550),
+        // height: ScreenUtil.getInstance().setHeight(954),
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: <Widget>[_goodsList()],
+        ),
       ),
     );
   }
