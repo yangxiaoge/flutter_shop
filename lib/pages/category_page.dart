@@ -61,26 +61,23 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
     return InkWell(
       onTap: () {
         //同一个tab多次点击忽略不处理
-        if (_selectLeftCategoryIndex == index) {
-          return;
+        if (_selectLeftCategoryIndex != index) {
+          setState(() {
+            _selectLeftCategoryIndex = index;
+          });
+
+          var childLsit = list[index].bxMallSubDto;
+          var categoryId = list[index].mallCategoryId;
+          //更新右上角商品分类
+          Provide.value<ChildCategoryProvide>(context)
+              .setChildCategory(childLsit);
+
+          //右上角分类滚动到下标0位置
+          _controller.animateTo(0,
+              duration: Duration(milliseconds: 200), curve: Curves.ease);
+          //商品列表请求
+          _getGoodsList(categoryId: categoryId);
         }
-        setState(() {
-          _selectLeftCategoryIndex = index;
-        });
-
-        //右上角分类下标重置
-        _selectRightCategoryIndex = 0;
-        var childLsit = list[index].bxMallSubDto;
-        var categoryId = list[index].mallCategoryId;
-        //更新右上角商品分类
-        Provide.value<ChildCategoryProvide>(context)
-            .setChildCategory(childLsit);
-
-        //右上角分类滚动到下标0位置
-        _controller.animateTo(0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
-        //商品列表请求
-        _getGoodsList(categoryId: categoryId);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -135,9 +132,6 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
   }
 }
 
-///当前右上角商品分类选中的下标
-int _selectRightCategoryIndex = 0;
-
 ///右上角商品分类滚动监听
 ScrollController _controller = new ScrollController();
 
@@ -176,26 +170,31 @@ class __RightTopCategoryNavState extends State<RightTopCategoryNav> {
   }
 
   Widget _rightInkWellItem(int index, BxMallSubDto item) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectRightCategoryIndex = index;
-        });
+    return Provide<ChildCategoryProvide>(
+      builder: (context, _, data) {
+        return InkWell(
+          onTap: () {
+            setState(() {
+              Provide.value<ChildCategoryProvide>(context)
+                  .setChildSelectCategoryIndex(index);
+            });
+          },
+          child: Container(
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(
+              horizontal: 5,
+            ),
+            alignment: Alignment.center,
+            child: Text(item.mallSubName,
+                style: TextStyle(
+                  fontSize: ScreenUtil.getInstance().setSp(30),
+                  color: data.selectChildCategoryIndex == index
+                      ? Theme.of(context).primaryColor
+                      : Colors.black,
+                )),
+          ),
+        );
       },
-      child: Container(
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(
-          horizontal: 5,
-        ),
-        alignment: Alignment.center,
-        child: Text(item.mallSubName,
-            style: TextStyle(
-              fontSize: ScreenUtil.getInstance().setSp(30),
-              color: _selectRightCategoryIndex == index
-                  ? Theme.of(context).primaryColor
-                  : Colors.black,
-            )),
-      ),
     );
   }
 }
