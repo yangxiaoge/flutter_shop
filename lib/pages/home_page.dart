@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                   TopGridView(topCategoryList),
                   AdBanner(adPic),
                   LeaderPhone(leaderPhone, leaderImgUrl),
-                  //TicketIntegral(saomaUrl, integralMallPicUrl, newUserUrl),
+                  TicketIntegral(saomaUrl, integralMallPicUrl, newUserUrl),
                   Recommend(recommendList),
                   FloorTitle(titleImgUrl: floor1TitleImgUrl),
                   FloorGoodsList(floorGoods: floor1Goods),
