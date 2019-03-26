@@ -1,10 +1,11 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
+import 'package:flutter_easyrefresh/ball_pulse_header.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_shop/constants/import.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_easyrefresh/ball_pulse_header.dart';
-import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
@@ -13,14 +14,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //FutureBuilder对应 future
   Future _future;
+
   //默认经纬度
   var formData = {'lon': '32.162746', 'lat': '118.703763'};
+
   //火爆商品页码
   int page = 1;
+
   //火爆商品list
   List<Map> goodsList = [];
+
   //listview滑动监听
   ScrollController _controller = new ScrollController();
+
   //显示floatingActionButton
   bool _showFloatBtn = false;
 
@@ -83,7 +89,8 @@ class _HomePageState extends State<HomePage> {
             String integralMallPicUrl =
                 data['data']['integralMallPic']['PICTURE_ADDRESS'];
             String newUserUrl = data['data']['newUser']['PICTURE_ADDRESS'];
-            List<Map> recommendList = (data['data']['recommend'] as List).cast();
+            List<Map> recommendList =
+                (data['data']['recommend'] as List).cast();
 
             String floor1TitleImgUrl =
                 data['data']['floor1Pic']['PICTURE_ADDRESS'];
@@ -250,6 +257,7 @@ class SwiperDiy extends StatelessWidget {
   final List swiperDataList;
 
   SwiperDiy(this.swiperDataList);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -274,6 +282,7 @@ class SwiperDiy extends StatelessWidget {
 /// 顶部分类GridView
 class TopGridView extends StatelessWidget {
   final List navigatorList;
+
   Widget _gridviewItem(item) {
     return InkWell(
       onTap: () {
@@ -436,7 +445,9 @@ class Recommend extends StatelessWidget {
                 Border(left: BorderSide(width: 0.5, color: Colors.black12))),
         child: Column(
           children: <Widget>[
-            Image.network(recommendList[index]['image']),
+            Expanded(
+              child: Image.network(recommendList[index]['image']),
+            ),
             Text('￥${recommendList[index]['mallPrice']}'),
             Text(
               '￥${recommendList[index]['price']}',
@@ -505,6 +516,7 @@ class FloorTitle extends StatelessWidget {
 ///楼层商品列表
 class FloorGoodsList extends StatelessWidget {
   final List floorGoods;
+
   FloorGoodsList({Key key, this.floorGoods}) : super(key: key);
 
   @override

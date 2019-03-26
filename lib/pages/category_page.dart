@@ -32,6 +32,7 @@ class LeftCategoryNav extends StatefulWidget {
 
 class _LeftCategoryNavState extends State<LeftCategoryNav> {
   List<Data> list = [];
+
   //当前左侧分类选中的下标
   int _selectLeftCategoryIndex = 0;
 
@@ -89,7 +90,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
       child: Container(
         decoration: BoxDecoration(
             color: _selectLeftCategoryIndex == index
-                ? Colors.black12
+                ? Color.fromRGBO(236, 238, 239, 1.0)
                 : Colors.white,
             border:
                 Border(right: BorderSide(width: 0.5, color: Colors.black12))),
@@ -180,16 +181,21 @@ class __RightTopCategoryNavState extends State<RightTopCategoryNav> {
     return InkWell(
       onTap: () {
         setState(() {
-          Provide.value<ChildCategoryProvide>(context)
-              .setChildSelectCategoryIndex(index, item.mallSubId);
+          //同一个tab多次点击忽略不处理
+          if (Provide.value<ChildCategoryProvide>(context)
+                  .selectChildCategoryIndex !=
+              index) {
+            Provide.value<ChildCategoryProvide>(context)
+                .setChildSelectCategoryIndex(index, item.mallSubId);
 
-          //商品列表滚动到下标0位置
-          if (_goodsListController.hasClients) {
-            _goodsListController.animateTo(0,
-                duration: Duration(milliseconds: 200), curve: Curves.ease);
+            //商品列表滚动到下标0位置
+            if (_goodsListController.hasClients) {
+              _goodsListController.animateTo(0,
+                  duration: Duration(milliseconds: 200), curve: Curves.ease);
+            }
+            //商品列表请求
+            _getGoodsList(item.mallSubId);
           }
-          //商品列表请求
-          _getGoodsList(item.mallSubId);
         });
       },
       child: Container(
