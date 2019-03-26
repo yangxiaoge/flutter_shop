@@ -73,9 +73,16 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
               .setChildCategory(childLsit, categoryId);
 
           //右上角分类滚动到下标0位置
-          _controller.animateTo(0,
-              duration: Duration(milliseconds: 200), curve: Curves.ease);
-          // //商品列表请求
+          if (_controller.hasClients) {
+            _controller.animateTo(0,
+                duration: Duration(milliseconds: 200), curve: Curves.ease);
+          }
+          //商品列表滚动到下标0位置
+          if (_goodsListController.hasClients) {
+            _goodsListController.animateTo(0,
+                duration: Duration(milliseconds: 200), curve: Curves.ease);
+          }
+          //商品列表请求
           _getGoodsList(categoryId);
         }
       },
@@ -175,7 +182,13 @@ class __RightTopCategoryNavState extends State<RightTopCategoryNav> {
         setState(() {
           Provide.value<ChildCategoryProvide>(context)
               .setChildSelectCategoryIndex(index, item.mallSubId);
-          print('item.mallSubId = ' + item.mallSubId);
+
+          //商品列表滚动到下标0位置
+          if (_goodsListController.hasClients) {
+            _goodsListController.animateTo(0,
+                duration: Duration(milliseconds: 200), curve: Curves.ease);
+          }
+          //商品列表请求
           _getGoodsList(item.mallSubId);
         });
       },
@@ -212,6 +225,9 @@ class __RightTopCategoryNavState extends State<RightTopCategoryNav> {
   }
 }
 
+///商品列表滚动监听
+ScrollController _goodsListController = new ScrollController();
+
 ///商品列表
 class MallGoodsList extends StatefulWidget {
   @override
@@ -219,6 +235,12 @@ class MallGoodsList extends StatefulWidget {
 }
 
 class _MallGoodsListState extends State<MallGoodsList> {
+  @override
+  void dispose() {
+    _goodsListController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Provide<CategoryGoodsListProvide>(
@@ -238,6 +260,7 @@ class _MallGoodsListState extends State<MallGoodsList> {
 
   Widget _goodsList(List goodsList) {
     return GridView.builder(
+      controller: _goodsListController,
       scrollDirection: Axis.vertical,
       itemCount: goodsList.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
