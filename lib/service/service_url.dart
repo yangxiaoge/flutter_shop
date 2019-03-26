@@ -4,10 +4,10 @@
 const String baseUrl = 'http://61.163.2.122/baixing/';
 
 const servicePath = {
-  homePageContent: baseUrl + 'wxmini/homePageContent',
-  homePageBelowConten: baseUrl + 'wxmini/homePageBelowConten',
-  category: baseUrl + 'wxmini/getCategory',
-  getMallGoods: baseUrl + 'wxmini/getMallGoods',
+  homePageContent: 'wxmini/homePageContent',
+  homePageBelowConten: 'wxmini/homePageBelowConten',
+  category: 'wxmini/getCategory',
+  getMallGoods: 'wxmini/getMallGoods',
 };
 
 //商店首页信息

@@ -4,8 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter_shop/service/service_url.dart';
 
 Dio dio = Dio()
-  ..options.connectTimeout = 5000
-  ..options.receiveTimeout = 5000
+  ..options.baseUrl = baseUrl
+  ..options.connectTimeout = 10000
+  ..options.receiveTimeout = 3000
   ..options.contentType =
       ContentType.parse('application/x-www-form-urlencoded');
 
