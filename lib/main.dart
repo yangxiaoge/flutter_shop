@@ -25,13 +25,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      
       title: Constants.appName,
       theme: ThemeData(
         //https://stackoverflow.com/questions/50212484/what-is-the-difference-between-primarycolor-and-primaryswatch-in-flutter
         //通常最好定义一个primarySwatch而不是primaryColor。因为一些material组件可能会使用不同的阴影，primaryColor如阴影，边框，......
         primarySwatch: Colors.pink,
       ),
-      home: SliverAppBarTest(),
+      home: IndexPage(),
+      // home: SliverAppBarTest(),
     );
   }
 }
