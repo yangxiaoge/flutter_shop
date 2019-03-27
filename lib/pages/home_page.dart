@@ -436,7 +436,6 @@ class Recommend extends StatelessWidget {
       onTap: () {},
       child: Container(
         width: ScreenUtil.getInstance().setWidth(250),
-        height: ScreenUtil.getInstance().setHeight(330),
         padding: EdgeInsets.all(8),
         //设置左边框
         decoration: BoxDecoration(
@@ -463,15 +462,12 @@ class Recommend extends StatelessWidget {
 
   //横向商品listview
   Widget _horizontalListView() {
-    return Container(
-      height: ScreenUtil.getInstance().setHeight(330),
-      child: ListView.builder(
-        itemCount: recommendList.length,
-        itemBuilder: (context, index) {
-          return _item(index);
-        },
-        scrollDirection: Axis.horizontal,
-      ),
+    return ListView.builder(
+      itemCount: recommendList.length,
+      itemBuilder: (context, index) {
+        return _item(index);
+      },
+      scrollDirection: Axis.horizontal,
     );
   }
 
@@ -486,7 +482,9 @@ class Recommend extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           _titleWidget(),
-          _horizontalListView(),
+          Expanded(
+            child: _horizontalListView(),
+          ),
         ],
       ),
     );
