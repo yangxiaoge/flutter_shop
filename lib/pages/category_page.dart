@@ -40,7 +40,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
     super.initState();
     _getCategory();
     //为了第一次能加载商品列表
-    _getGoodsList("4");
+    _getGoodsList();
   }
 
   @override
@@ -84,7 +84,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
                 duration: Duration(milliseconds: 200), curve: Curves.ease);
           }
           //商品列表请求
-          _getGoodsList(categoryId);
+          _getGoodsList(categoryId:categoryId);
         }
       },
       child: Container(
@@ -119,11 +119,11 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
     });
   }
 
-  _getGoodsList(String categoryId) async {
+  _getGoodsList({String categoryId}) async {
     //categoryId: 大类 ID，字符串类型
     //categorySubId : 子类 ID，字符串类型，如果没有可以填写空字符串，例如 ''
     //page: 分页的页数，int 类型
-    var formData = {'categoryId': categoryId, 'categorySubId': '', 'page': 1};
+    var formData = {'categoryId': categoryId??'4', 'categorySubId': '', 'page': 1};
     await request(getMallGoods, formData: formData).then((val) {
       var data = json.decode(val.toString());
       CategoryGoodsListModel categoryGoodsListModel =
