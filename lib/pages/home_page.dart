@@ -184,11 +184,27 @@ class _HomePageState extends State<HomePage> {
   //title
   Widget _hotTitle(context) {
     return Container(
-      alignment: Alignment.center,
       padding: EdgeInsets.all(5),
-      child: Text(
-        '火爆商品',
-        style: TextStyle(color: Theme.of(context).primaryColor),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width:  ScreenUtil.getInstance().setWidth(40),
+            height: ScreenUtil.getInstance().setHeight(40),
+            child: Center(child: Text(
+              '火',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: ScreenUtil.getInstance().setSp(30)),
+            ),),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(40),color: Theme.of(context).primaryColor),
+          ),
+          SizedBox(width: ScreenUtil.getInstance().setWidth(5),),
+          Text(
+            '火爆商品',
+            style: TextStyle(color: Theme.of(context).primaryColor,fontSize: ScreenUtil.getInstance().setSp(28)),
+          )
+        ],
       ),
       decoration: BoxDecoration(
           color: Color.fromRGBO(244, 245, 245, 1.0),
