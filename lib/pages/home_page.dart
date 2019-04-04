@@ -291,9 +291,16 @@ class SwiperDiy extends StatelessWidget {
       child: Swiper(
         itemCount: swiperDataList.length,
         itemBuilder: (context, index) {
-          return Image.network(
-            swiperDataList[index]['image'],
-            fit: BoxFit.fill,
+          return InkWell(
+            onTap: () {
+              //查看商品详情
+              Application.router.navigateTo(context,
+                  '${Routers.detailsPage}?id=${swiperDataList[index]['goodsId']}');
+            },
+            child: Image.network(
+              swiperDataList[index]['image'],
+              fit: BoxFit.fill,
+            ),
           );
         },
         pagination: SwiperPagination(),
@@ -455,9 +462,13 @@ class Recommend extends StatelessWidget {
   }
 
   //商品子项部件
-  Widget _item(index) {
+  Widget _item(context, index) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        //查看商品详情
+        Application.router.navigateTo(context,
+            '${Routers.detailsPage}?id=${recommendList[index]['goodsId']}');
+      },
       child: Container(
         width: ScreenUtil.getInstance().setWidth(250),
         padding: EdgeInsets.all(8),
@@ -489,7 +500,7 @@ class Recommend extends StatelessWidget {
     return ListView.builder(
       itemCount: recommendList.length,
       itemBuilder: (context, index) {
-        return _item(index);
+        return _item(context, index);
       },
       scrollDirection: Axis.horizontal,
     );
@@ -546,42 +557,45 @@ class FloorGoodsList extends StatelessWidget {
     return Container(
       child: Column(
         children: <Widget>[
-          _firstRow(),
-          _secondRow(),
+          _firstRow(context),
+          _secondRow(context),
         ],
       ),
     );
   }
 
-  Widget _firstRow() {
+  Widget _firstRow(context) {
     return Row(
       children: <Widget>[
-        _goodsItem(floorGoods[0]),
+        _goodsItem(floorGoods[0],context),
         Column(
           children: <Widget>[
-            _goodsItem(floorGoods[1]),
-            _goodsItem(floorGoods[2])
+            _goodsItem(floorGoods[1],context),
+            _goodsItem(floorGoods[2],context)
           ],
         )
       ],
     );
   }
 
-  Widget _secondRow() {
+  Widget _secondRow(context) {
     return Row(
       children: <Widget>[
-        _goodsItem(floorGoods[3]),
-        _goodsItem(floorGoods[4]),
+        _goodsItem(floorGoods[3],context),
+        _goodsItem(floorGoods[4],context),
       ],
     );
   }
 
-  Widget _goodsItem(Map goods) {
+  Widget _goodsItem(Map goods,context) {
     return Container(
       width: ScreenUtil.getInstance().setWidth(375), // 750 / 2,设计稿是750*1334
       child: InkWell(
         onTap: () {
           debugPrint('点击了楼层商品');
+          //查看商品详情
+        Application.router.navigateTo(context,
+            '${Routers.detailsPage}?id=${goods['goodsId']}');
         },
         child: Image.network(goods['image']),
       ),
