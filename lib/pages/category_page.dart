@@ -341,10 +341,13 @@ class _MallGoodsListState extends State<MallGoodsList> {
         crossAxisSpacing: 5,
       ),
       itemBuilder: (context, index) {
-        var goodsItem = goodsList[index];
+        CategoryListData goodsItem = goodsList[index];
         return InkWell(
           onTap: () {
-            debugPrint('火爆商品item: ${goodsItem.goodsName}');
+            debugPrint('分类商品item: ${goodsItem.goodsName}');
+            //查看商品详情
+            Application.router.navigateTo(
+                context, '${Routers.detailsPage}?id=${goodsItem.goodsId}');
           },
           child: Container(
             width: ScreenUtil.getInstance().setWidth(275),
