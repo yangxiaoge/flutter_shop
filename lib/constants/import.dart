@@ -14,4 +14,5 @@ export 'package:flutter_shop/provide/child_category_provide.dart';
 export 'package:flutter_shop/provide/category_goods_list_provide.dart';
 export 'package:flutter_shop/model/category_model.dart';
 export 'package:flutter_shop/model/category_goodslist_model.dart';
+export 'package:flutter_shop/util/toast.dart';
 
