@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shop/model/detail_model.dart';
 import 'package:flutter_shop/constants/import.dart';
 
-class DetailInfoProvide with ChangeNotifier {
+class DetailsInfoProvide with ChangeNotifier {
   DetailModel goodsInfo = null;
 
   //从后台获取商品详情数据

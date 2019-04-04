@@ -10,12 +10,12 @@ void main() {
 
   var childCategory = ChildCategoryProvide();
   var categoryGoodsList = CategoryGoodsListProvide();
-  var detailInfo = DetailInfoProvide();
+  var detailInfo = DetailsInfoProvide();
   var provides = Providers();
   provides
     ..provide(Provider<ChildCategoryProvide>.value(childCategory))
     ..provide(Provider<CategoryGoodsListProvide>.value(categoryGoodsList))
-    ..provide(Provider<DetailInfoProvide>.value(detailInfo));
+    ..provide(Provider<DetailsInfoProvide>.value(detailInfo));
   runApp(ProviderNode(
     providers: provides,
     child: MyApp(),

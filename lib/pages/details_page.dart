@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_shop/constants/import.dart';
+import 'package:flutter_shop/pages/details_page/details_top_area.dart';
+import 'package:flutter_shop/pages/details_page/details_explain.dart';
 
 class DetailsPage extends StatelessWidget {
   final String goodsId;
@@ -22,8 +24,11 @@ class DetailsPage extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Container(
-                child: Column(
-                  children: <Widget>[],
+                child: ListView(
+                  children: <Widget>[
+                    DetailsTopArea(),
+                    DetailsExplain(),
+                  ],
                 ),
               );
             } else {
@@ -34,8 +39,7 @@ class DetailsPage extends StatelessWidget {
   }
 
   Future _getGoodsInfo(context) async {
-    await Provide.value<DetailInfoProvide>(context)
-        .getGoodsInfo('e47bf468042a4940a3b8a32d07f64d71');
+    await Provide.value<DetailsInfoProvide>(context).getGoodsInfo(goodsId);
     return '完成加载';
   }
 }
