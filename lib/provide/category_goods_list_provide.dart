@@ -12,4 +12,11 @@ class CategoryGoodsListProvide extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  ///上拉加载更多商品列表
+  setCategoryMoreGoodsList(List<CategoryListData> list) {
+    childCategoryGoodsList.addAll(list);
+
+    notifyListeners();
+  }
 }
