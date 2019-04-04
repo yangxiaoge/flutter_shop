@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_shop/constants/import.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:flutter_shop/routers/application.dart';
-import 'package:flutter_shop/routers/routers.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();

@@ -8,6 +8,7 @@ const servicePath = {
   homePageBelowConten: 'wxmini/homePageBelowConten',
   category: 'wxmini/getCategory',
   getMallGoods: 'wxmini/getMallGoods',
+  getGoodDetailById: 'wxmini/getGoodDetailById',
 };
 
 //商店首页信息
@@ -18,6 +19,8 @@ const String homePageBelowConten = 'homePageBelowConten';
 const String category = 'category';
 //获取商品列表
 const String getMallGoods = 'getMallGoods';
+//商品详情页
+const String getGoodDetailById = 'getGoodDetailById';
 
 //服务接口对应名称
 const Map serviceName = {
@@ -25,6 +28,7 @@ const Map serviceName = {
   homePageBelowConten: '首页火爆商品',
   category: '商品分类',
   getMallGoods: '商品列表',
+  getGoodDetailById: '商品详情',
 };
 //获取服务器名称
 String getServiceName(urlKey) {

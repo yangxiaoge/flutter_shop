@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_shop/pages/index_page.dart';
 import 'package:flutter_shop/constants/import.dart';
-import 'package:flutter_shop/constants/import.dart';
-import 'package:flutter_shop/routers/routers.dart';
-import 'package:flutter_shop/routers/application.dart';
 
 void main() {
   /// 强制竖屏
@@ -13,10 +10,12 @@ void main() {
 
   var childCategory = ChildCategoryProvide();
   var categoryGoodsList = CategoryGoodsListProvide();
+  var detailInfo = DetailInfoProvide();
   var provides = Providers();
   provides
     ..provide(Provider<ChildCategoryProvide>.value(childCategory))
-    ..provide(Provider<CategoryGoodsListProvide>.value(categoryGoodsList));
+    ..provide(Provider<CategoryGoodsListProvide>.value(categoryGoodsList))
+    ..provide(Provider<DetailInfoProvide>.value(detailInfo));
   runApp(ProviderNode(
     providers: provides,
     child: MyApp(),
@@ -26,6 +25,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //fluro路由配置
     final router = Router();
     Routers.configureRouters(router);
     Application.router = router;

@@ -8,7 +8,9 @@ class DetailModel {
   DetailModel.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     message = json['message'];
-    data = json['data'] != null ? new DetailsGoodsData.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new DetailsGoodsData.fromJson(json['data'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -60,7 +62,7 @@ class DetailsGoodsData {
 }
 
 class GoodInfo {
-  String image5; 
+  String image5;
   int amount;
   String image3;
   String image4;
@@ -69,7 +71,7 @@ class GoodInfo {
   String image1;
   String image2;
   String goodsSerialNumber;
-  int oriPrice;
+  double oriPrice;
   double presentPrice;
   String comPic;
   int state;
