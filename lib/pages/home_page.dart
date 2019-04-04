@@ -6,6 +6,8 @@ import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_shop/constants/import.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_shop/routers/application.dart';
+import 'package:flutter_shop/routers/routers.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
@@ -189,20 +191,28 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            width:  ScreenUtil.getInstance().setWidth(40),
+            width: ScreenUtil.getInstance().setWidth(40),
             height: ScreenUtil.getInstance().setHeight(40),
-            child: Center(child: Text(
-              '火',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: ScreenUtil.getInstance().setSp(30)),
-            ),),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(40),color: Theme.of(context).primaryColor),
+            child: Center(
+              child: Text(
+                '火',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ScreenUtil.getInstance().setSp(30)),
+              ),
+            ),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(40),
+                color: Theme.of(context).primaryColor),
           ),
-          SizedBox(width: ScreenUtil.getInstance().setWidth(5),),
+          SizedBox(
+            width: ScreenUtil.getInstance().setWidth(5),
+          ),
           Text(
             '火爆商品',
-            style: TextStyle(color: Theme.of(context).primaryColor,fontSize: ScreenUtil.getInstance().setSp(28)),
+            style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: ScreenUtil.getInstance().setSp(28)),
           )
         ],
       ),
@@ -220,6 +230,8 @@ class _HomePageState extends State<HomePage> {
         return InkWell(
           onTap: () {
             debugPrint('火爆商品item$itemMap');
+            Application.router.navigateTo(
+                context, '${Routers.detailsPage}?id=${itemMap['goodsId']}');
           },
           child: Container(
             width: ScreenUtil.getInstance().setWidth(375),
