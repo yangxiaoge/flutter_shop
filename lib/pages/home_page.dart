@@ -142,10 +142,7 @@ class _HomePageState extends State<HomePage> {
             );
           } else {
             return Center(
-              child: Text(
-                '加载中...',
-                style: TextStyle(fontSize: ScreenUtil.getInstance().setSp(28)),
-              ),
+              child: CircularProgressIndicator(),
             );
           }
         },

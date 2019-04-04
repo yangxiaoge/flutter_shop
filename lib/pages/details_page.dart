@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_shop/constants/import.dart';
 import 'package:flutter_shop/pages/details_page/details_top_area.dart';
 import 'package:flutter_shop/pages/details_page/details_explain.dart';
+import 'package:flutter_shop/pages/details_page/details_tabbar.dart';
 
 class DetailsPage extends StatelessWidget {
   final String goodsId;
@@ -28,6 +29,7 @@ class DetailsPage extends StatelessWidget {
                   children: <Widget>[
                     DetailsTopArea(),
                     DetailsExplain(),
+                    DetailsTabBar(),
                   ],
                 ),
               );
