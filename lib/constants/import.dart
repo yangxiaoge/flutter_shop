@@ -17,6 +17,7 @@ export 'package:flutter_shop/provide/details_info_provide.dart';
 export 'package:flutter_shop/model/category_model.dart';
 export 'package:flutter_shop/model/category_goodslist_model.dart';
 export 'package:flutter_shop/util/toast.dart';
+export 'package:flutter_shop/util/toast_util.dart';
 export 'package:flutter_shop/routers/application.dart';
 export 'package:flutter_shop/routers/routers.dart';
 

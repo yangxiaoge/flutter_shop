@@ -3,7 +3,7 @@ import 'package:flutter_shop/model/detail_model.dart';
 import 'package:flutter_shop/constants/import.dart';
 
 class DetailsInfoProvide with ChangeNotifier {
-  DetailModel goodsInfo = null;
+  DetailModel goodsInfo;
   bool isLeft = true;
   bool isRight = false;
 

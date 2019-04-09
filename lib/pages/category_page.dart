@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/constants/import.dart';
 import 'package:flutter_easyrefresh/delivery_header.dart';
-import 'package:flutter_easyrefresh/taurus_footer.dart';
-import 'package:flutter_easyrefresh/bezier_bounce_footer.dart';
+// import 'package:flutter_easyrefresh/taurus_footer.dart';
+// import 'package:flutter_easyrefresh/bezier_bounce_footer.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 class CategoryPage extends StatelessWidget {
@@ -322,6 +322,7 @@ class _MallGoodsListState extends State<MallGoodsList> {
       //provide通知刷新商品列表
       if (categoryGoodsListModel.data == null) {
         ToastHelper.showCenterShortToast('没有更多了');
+        Toast.show(context, '没有更多了');
         Provide.value<ChildCategoryProvide>(context).changeNomoreText('没有更多了');
       } else {
         Provide.value<CategoryGoodsListProvide>(context)

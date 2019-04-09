@@ -17,6 +17,7 @@ class DetailsBottom extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     debugPrint('购物车');
+                    Toast.show(context, '购物车');
                   },
                   child: Center(
                     child: Icon(
@@ -36,6 +37,7 @@ class DetailsBottom extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     debugPrint('加入购物车');
+                    Toast.show(context, '加入购物车');
                   },
                   child: Center(
                       child: Text(
@@ -57,6 +59,7 @@ class DetailsBottom extends StatelessWidget {
                       // splashColor: Colors.grey,
                       onTap: () {
                         debugPrint('立即购买');
+                        Toast.show(context, '立即购买');
                       },
                       child: Center(
                         child: Text(
