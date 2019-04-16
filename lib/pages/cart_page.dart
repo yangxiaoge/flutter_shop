@@ -1,47 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/constants/import.dart';
 
-class CartPage extends StatelessWidget {
+class CartPage extends StatefulWidget {
+  @override
+  _CartPageState createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  List<String> testList = [];
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Container(
-            child: TabBar(
-              labelColor: Color(0xFF333333),
-              labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              unselectedLabelColor: Color(0xFF888888),
-              indicatorColor: Color(0xFF51DEC6),
-              indicatorSize: TabBarIndicatorSize.label,
-              indicatorWeight: 3,
-              indicatorPadding: EdgeInsets.fromLTRB(8, 0, 8, 5),
-              tabs: <Widget>[
-                Tab(text: '精选'),
-                Tab(text: '女生'),
-                Tab(text: '男生'),
-                Tab(text: '漫画'),
-              ],
-            ),
+    return Container(
+      child: Column(
+        children: <Widget>[
+          RaisedButton(
+            child: Text('添加'),
+            onPressed: () {
+              _add();
+            },
           ),
-        ),
-        body: TabBarView(
-          children: <Widget>[
-            //如果需要支持阿拉伯（RTL）从右往左展示：
-            //1, 通过国际化：请看： https://stackoverflow.com/questions/50535185/right-to-left-rtl-in-flutter
-            //2，以下是通过Directionality直接去选择TextDirection
-            Center(child: Text('购物车页面')),
-            Directionality(
-                textDirection: TextDirection.rtl, child: Text('购物车页面')),
-            Directionality(
-                textDirection: TextDirection.ltr, child: Text('购物车页面')),
-            Container(
-              color: Colors.orange,
+          RaisedButton(
+            child: Text('删除'),
+            onPressed: () {
+              _clear();
+            },
+          ),
+          Container(
+            height: 300,
+            child: ListView.builder(
+              itemCount: testList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(testList[index]),
+                  leading: Icon(Icons.ac_unit),
+                );
+              },
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
+  }
+
+  void _add() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String temp = '小羊最帅！！！';
+    testList.add(temp);
+    prefs.setStringList('哈哈', testList);
+    _show();
+  }
+
+  void _show() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getStringList('哈哈') != null) {
+      setState(() {
+        testList = prefs.getStringList('哈哈');
+      });
+    }
+  }
+
+  void _clear() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.clear();
+    prefs.remove('哈哈');
+    setState(() {
+      testList = [];
+    });
   }
 }

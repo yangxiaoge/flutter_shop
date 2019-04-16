@@ -4,6 +4,14 @@ import 'package:flutter_shop/constants/import.dart';
 class DetailsBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var goodsInfo =
+        Provide.value<DetailsInfoProvide>(context).goodsInfo.data.goodInfo;
+    var goodsId = goodsInfo.goodsId;
+    var goodsName = goodsInfo.goodsName;
+    var count = 1;
+    var price = goodsInfo.presentPrice;
+    var images = goodsInfo.image1;
+
     return Container(
       color: Colors.white,
       height: ScreenUtil().setHeight(80),
@@ -35,9 +43,12 @@ class DetailsBottom extends StatelessWidget {
               child: Ink(
                 color: Colors.green,
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
                     debugPrint('加入购物车');
                     Toast.show(context, '加入购物车');
+
+                    await Provide.value<CartProvide>(context)
+                        .save(goodsId, goodsName, count, price, images);
                   },
                   child: Center(
                       child: Text(
@@ -57,9 +68,12 @@ class DetailsBottom extends StatelessWidget {
                   // height: 100.0,
                   child: InkWell(
                       // splashColor: Colors.grey,
-                      onTap: () {
+                      onTap: () async {
                         debugPrint('立即购买');
                         Toast.show(context, '立即购买');
+
+                        //todo 暂时用清除
+                        await Provide.value<CartProvide>(context).remove();
                       },
                       child: Center(
                         child: Text(

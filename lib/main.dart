@@ -11,11 +11,13 @@ void main() {
   var childCategory = ChildCategoryProvide();
   var categoryGoodsList = CategoryGoodsListProvide();
   var detailInfo = DetailsInfoProvide();
+  var cartProvide = CartProvide();
   var provides = Providers();
   provides
     ..provide(Provider<ChildCategoryProvide>.value(childCategory))
     ..provide(Provider<CategoryGoodsListProvide>.value(categoryGoodsList))
-    ..provide(Provider<DetailsInfoProvide>.value(detailInfo));
+    ..provide(Provider<DetailsInfoProvide>.value(detailInfo))
+    ..provide(Provider<CartProvide>.value(cartProvide));
   runApp(ProviderNode(
     providers: provides,
     child: MyApp(),

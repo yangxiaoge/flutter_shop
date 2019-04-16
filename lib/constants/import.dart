@@ -6,6 +6,7 @@ export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:url_launcher/url_launcher.dart';
 export 'package:provide/provide.dart';
 export 'package:fluro/fluro.dart';
+export 'package:shared_preferences/shared_preferences.dart';
 
 //本应用
 export 'package:flutter_shop/constants/constants.dart';
@@ -14,6 +15,7 @@ export 'package:flutter_shop/service/service_url.dart';
 export 'package:flutter_shop/provide/child_category_provide.dart';
 export 'package:flutter_shop/provide/category_goods_list_provide.dart';
 export 'package:flutter_shop/provide/details_info_provide.dart';
+export 'package:flutter_shop/provide/cart_provide.dart';
 export 'package:flutter_shop/model/category_model.dart';
 export 'package:flutter_shop/model/category_goodslist_model.dart';
 export 'package:flutter_shop/util/toast.dart';
