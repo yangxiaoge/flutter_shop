@@ -10,7 +10,7 @@ class CartProvide with ChangeNotifier {
   ///添加商品
   save(goodsId, goodsName, count, price, images) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    cartString = prefs.getString('cartInfo');
+    cartString = prefs.getString(Constants.cartInfo);
 
     var temp = cartString == null ? [] : json.decode(cartString);
     List<Map> tempList = (temp as List).cast();
@@ -45,7 +45,7 @@ class CartProvide with ChangeNotifier {
     debugPrint('cartString字符串 = $cartString');
     debugPrint('cartInfoList模型 = $cartInfoList');
 
-    prefs.setString('cartInfo', cartString);
+    prefs.setString(Constants.cartInfo, cartString);
 
     notifyListeners();
   }
@@ -53,9 +53,25 @@ class CartProvide with ChangeNotifier {
   ///清空购物车
   remove() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('cartInfo');
+    prefs.remove(Constants.cartInfo);
     cartInfoList.clear();
     debugPrint('清空成功');
+
+    notifyListeners();
+  }
+
+  ///获取购物车商品
+  getCartInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cartString = prefs.getString(Constants.cartInfo);
+    cartInfoList.clear();
+    if (cartString != null) {
+      List<Map> tempList = (cartString as List).cast();
+      tempList.forEach((item) {
+        //把item转成model后加入cartInfoList
+        cartInfoList.add(CartInfoModel.fromJson(item));
+      });
+    }
 
     notifyListeners();
   }

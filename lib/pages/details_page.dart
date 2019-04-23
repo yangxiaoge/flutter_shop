@@ -47,7 +47,7 @@ class DetailsPage extends StatelessWidget {
                 ],
               );
             } else {
-              return CupertinoActivityIndicator();
+              return Center(child: CupertinoActivityIndicator());
             }
           },
         ));

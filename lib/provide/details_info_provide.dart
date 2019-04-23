@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_shop/model/detail_model.dart';
 import 'package:flutter_shop/constants/import.dart';
 
 class DetailsInfoProvide with ChangeNotifier {
