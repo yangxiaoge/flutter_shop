@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/constants/import.dart';
+import 'package:flutter_shop/pages/cart_page/cart_bottom.dart';
 import 'package:flutter_shop/pages/cart_page/cart_item.dart';
 
 class CartPage extends StatelessWidget {
@@ -12,11 +13,18 @@ class CartPage extends StatelessWidget {
           if (snapshot.hasData) {
             List<CartInfoModel> cartList =
                 Provide.value<CartProvide>(context).cartList;
-            return ListView.builder(
-              itemCount: cartList.length,
-              itemBuilder: (context, index) {
-                return CartItem(cartList[index]);
-              },
+            return Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: cartList.length,
+                    itemBuilder: (context, index) {
+                      return CartItem(cartList[index]);
+                    },
+                  ),
+                ),
+                CartBottom(),
+              ],
             );
           } else {
             return Text('正在加载');
