@@ -47,15 +47,15 @@ class _CartPageState extends State<CartPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String temp = '小羊最帅！！！';
     testList.add(temp);
-    prefs.setStringList('哈哈', testList);
+    prefs.setStringList('cartInfo', testList);
     _show();
   }
 
   void _show() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getStringList('哈哈') != null) {
+    if (prefs.getStringList('cartInfo') != null) {
       setState(() {
-        testList = prefs.getStringList('哈哈');
+        testList = prefs.getStringList('cartInfo');
       });
     }
   }
@@ -63,7 +63,7 @@ class _CartPageState extends State<CartPage> {
   void _clear() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // prefs.clear();
-    prefs.remove('哈哈');
+    prefs.remove('cartInfo');
     setState(() {
       testList = [];
     });

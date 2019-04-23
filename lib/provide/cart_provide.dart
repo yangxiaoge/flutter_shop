@@ -17,7 +17,7 @@ class CartProvide with ChangeNotifier {
     int index = 0;
     tempList.forEach((item) {
       if (item['goodsId'] == goodsId) {
-        //已存在数量加1
+        //购物车已存在，数量加1
         tempList[index]['count'] = item['count'] + 1;
         isHave = true;
       }
