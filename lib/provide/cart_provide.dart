@@ -5,7 +5,7 @@ import 'package:flutter_shop/model/cartinfo_model.dart';
 class CartProvide with ChangeNotifier {
   //购物车商品json数组
   String cartString = '[]';
-  List<CartInfoModel> cartInfoList = [];
+  List<CartInfoModel> cartList = [];
 
   ///添加商品
   save(goodsId, goodsName, count, price, images) async {
@@ -21,7 +21,7 @@ class CartProvide with ChangeNotifier {
       if (item['goodsId'] == goodsId) {
         //购物车已存在，数量加1
         tempList[index]['count'] = item['count'] + 1;
-        cartInfoList[index].count++;
+        cartList[index].count++;
         isHave = true;
       }
       index++;
@@ -38,12 +38,12 @@ class CartProvide with ChangeNotifier {
       };
 
       tempList.add(newGoods);
-      cartInfoList.add(CartInfoModel.fromJson(newGoods));
+      cartList.add(CartInfoModel.fromJson(newGoods));
     }
 
     cartString = json.encode(tempList).toString();
     debugPrint('cartString字符串 = $cartString');
-    debugPrint('cartInfoList模型 = $cartInfoList');
+    debugPrint('cartInfoList模型 = $cartList');
 
     prefs.setString(Constants.cartInfo, cartString);
 
@@ -54,7 +54,7 @@ class CartProvide with ChangeNotifier {
   remove() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove(Constants.cartInfo);
-    cartInfoList.clear();
+    cartList.clear();
     debugPrint('清空成功');
 
     notifyListeners();
@@ -64,12 +64,13 @@ class CartProvide with ChangeNotifier {
   getCartInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     cartString = prefs.getString(Constants.cartInfo);
-    cartInfoList.clear();
+    cartList.clear();
     if (cartString != null) {
-      List<Map> tempList = (cartString as List).cast();
+      //json.decode，防止直接转List会有问题
+      List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
       tempList.forEach((item) {
         //把item转成model后加入cartInfoList
-        cartInfoList.add(CartInfoModel.fromJson(item));
+        cartList.add(CartInfoModel.fromJson(item));
       });
     }
 
