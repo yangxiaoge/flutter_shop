@@ -4,6 +4,7 @@ import 'package:flutter_shop/constants/import.dart';
 class DetailsBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //商品详情信息获取（DetailsInfoProvide）
     var goodsInfo =
         Provide.value<DetailsInfoProvide>(context).goodsInfo.data.goodInfo;
     var goodsId = goodsInfo.goodsId;
@@ -67,7 +68,7 @@ class DetailsBottom extends StatelessWidget {
                   // width: 200.0,
                   // height: 100.0,
                   child: InkWell(
-                      // splashColor: Colors.grey,
+                      splashColor: Colors.blueAccent,
                       onTap: () async {
                         debugPrint('立即购买');
                         Toast.show(context, '立即购买');

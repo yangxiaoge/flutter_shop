@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/constants/import.dart';
+import 'package:flutter_shop/model/cartinfo_model.dart';
 
 class CartProvide with ChangeNotifier {
   //购物车商品json数组
   String cartString = '[]';
+  List<CartInfoModel> cartInfoList = [];
 
   ///添加商品
   save(goodsId, goodsName, count, price, images) async {
@@ -19,6 +21,7 @@ class CartProvide with ChangeNotifier {
       if (item['goodsId'] == goodsId) {
         //购物车已存在，数量加1
         tempList[index]['count'] = item['count'] + 1;
+        cartInfoList[index].count++;
         isHave = true;
       }
       index++;
@@ -26,17 +29,21 @@ class CartProvide with ChangeNotifier {
 
     //新加入购物车的商品
     if (!isHave) {
-      tempList.add({
+      Map<String, dynamic> newGoods = {
         'goodsId': goodsId,
         'goodsName': goodsName,
         'count': count,
         'price': price,
         'images': images
-      });
+      };
+
+      tempList.add(newGoods);
+      cartInfoList.add(CartInfoModel.fromJson(newGoods));
     }
 
     cartString = json.encode(tempList).toString();
-    debugPrint('cartString = $cartString');
+    debugPrint('cartString字符串 = $cartString');
+    debugPrint('cartInfoList模型 = $cartInfoList');
 
     prefs.setString('cartInfo', cartString);
 
@@ -47,6 +54,7 @@ class CartProvide with ChangeNotifier {
   remove() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('cartInfo');
+    cartInfoList.clear();
     debugPrint('清空成功');
 
     notifyListeners();

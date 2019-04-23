@@ -1,3 +1,4 @@
+///商品详情模型
 class DetailModel {
   String code;
   String message;
