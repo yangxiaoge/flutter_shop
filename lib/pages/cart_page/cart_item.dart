@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/constants/import.dart';
+import 'package:flutter_shop/pages/cart_page/cart_count.dart';
 
 class CartItem extends StatelessWidget {
   final CartInfoModel item;
@@ -59,9 +60,13 @@ class CartItem extends StatelessWidget {
     return Container(
       width: ScreenUtil().setWidth(300),
       padding: EdgeInsets.all(10.0),
-      alignment: Alignment.topLeft,
       child: Column(
-        children: <Widget>[Text(item.goodsName)],
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(item.goodsName),
+          CartCount(),
+        ],
       ),
     );
   }

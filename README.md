@@ -9,6 +9,9 @@
 | :--: | :--: | :--: | :--: | :--: | :--: |
 | 首页 | 首页 | 首页 | 分类 | 分类| 详情 |
 
+## 知识点
+![](技术胖flutter移动电商实战-知识点梳理.png)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

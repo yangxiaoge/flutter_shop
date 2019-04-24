@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_shop/widget/member_item.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_shop/constants/import.dart';
 
 class MemberPage extends StatefulWidget {
   @override
@@ -53,6 +54,11 @@ class _MemberPageState extends State<MemberPage> {
               onPressed: () {
                 _nativeChannel.invokeMethod(_alipay).then((success) {
                   print('支付宝 success = $success');
+                  if(!success){
+                   Toast.show(context, '您没有安装支付宝！');
+                  }else{
+                    Toast.show(context, '打开支付宝');
+                  }
                 });
               },
               title: '支付宝付款',

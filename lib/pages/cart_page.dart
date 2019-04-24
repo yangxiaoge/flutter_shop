@@ -17,6 +17,7 @@ class CartPage extends StatelessWidget {
                   builder: (context, _, val) {
                     return Expanded(
                       child: ListView.builder(
+                        shrinkWrap: true,
                         itemCount: val.cartList.length,
                         itemBuilder: (context, index) {
                           return CartItem(val.cartList[index]);

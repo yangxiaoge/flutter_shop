@@ -31,7 +31,7 @@ public class MainActivity extends FlutterActivity {
                             AlipayZeroSdk.startAlipayClient(this, "tsx08459q7nhhh9pdxpbp9b");
                             result.success(true);
                         } else {
-                            Toast.makeText(this, "您没有安装支付宝！", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(this, "您没有安装支付宝！", Toast.LENGTH_SHORT).show();
                             result.success(false);
                         }
                     }
