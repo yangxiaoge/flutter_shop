@@ -5,6 +5,7 @@ class CartBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: ScreenUtil().setWidth(130),
       padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
       color: Colors.white,
       child: Row(
@@ -30,9 +31,6 @@ class CartBottom extends StatelessWidget {
             activeColor: Theme.of(context).primaryColor,
             onChanged: (checked) {},
           ),
-          SizedBox(
-            width: ScreenUtil().setWidth(5),
-          ),
           Text('全选'),
         ],
       ),
@@ -43,7 +41,7 @@ class CartBottom extends StatelessWidget {
   Widget _totalPrice() {
     return Container(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -80,35 +78,53 @@ class CartBottom extends StatelessWidget {
 
   ///结算
   Widget _pay() {
-    return Container(
-      padding: EdgeInsets.only(left: 10),
-      child: InkWell(
-        onTap: () {},
-        child: Container(
-          padding: EdgeInsets.all(10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(3.0),
-            color: Colors.red,
-          ),
-          child: Text(
-            '结算(6)',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
-    );
-    // return Padding(
-    //   padding: EdgeInsets.symmetric(horizontal: 8.0),
-    //   child: FlatButton(
+    // return Container(
+    //   padding: EdgeInsets.only(left: 10),
+    //   child: InkWell(
+    //     onTap: () {},
+    //     child: Container(
+    //       padding: EdgeInsets.all(10),
+    //       alignment: Alignment.center,
+    //       decoration: BoxDecoration(
+    //         borderRadius: BorderRadius.circular(3.0),
+    //         color: Colors.red,
+    //       ),
+    //       child: Text(
+    //         '结算(6)',
+    //         style: TextStyle(color: Colors.white),
+    //       ),
+    //     ),
+    //   ),
+    // );
+
+    // return Container(
+    //   margin: EdgeInsets.only(left: ScreenUtil().setWidth(10),),
+    //   width: ScreenUtil().setWidth(160),
+    //   child: RaisedButton(
+    //     elevation: 0,
+    //     padding: EdgeInsets.all(1),
     //     onPressed: () {},
     //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3.0)),
     //     color: Colors.red,
     //     child: Text(
-    //       '结算(6)',
+    //       '结算(100)',
     //       style: TextStyle(color: Colors.white),
     //     ),
     //   ),
     // );
+
+    return Padding(
+      padding: EdgeInsets.only(left: ScreenUtil().setWidth(10)),
+      child: RaisedButton(
+        elevation: 0,
+        onPressed: () {},
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3.0)),
+        color: Colors.red,
+        child: Text(
+          '结算(100)',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
   }
 }
