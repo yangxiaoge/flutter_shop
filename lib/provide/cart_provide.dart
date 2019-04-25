@@ -52,7 +52,8 @@ class CartProvide with ChangeNotifier {
 
     prefs.setString(Constants.cartInfo, cartString);
 
-    notifyListeners();
+    //重新获取购物车商品
+    getCartInfo();
   }
 
   ///清空购物车
@@ -62,7 +63,8 @@ class CartProvide with ChangeNotifier {
     cartList.clear();
     debugPrint('清空成功');
 
-    notifyListeners();
+    //重新获取购物车商品
+    getCartInfo();
   }
 
   ///获取购物车商品
@@ -93,7 +95,6 @@ class CartProvide with ChangeNotifier {
 
   ///删除某个商品
   deleteOneGoods(String goodsId) async {
-    print(goodsId);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     cartString = prefs.getString(Constants.cartInfo);
 
@@ -106,8 +107,46 @@ class CartProvide with ChangeNotifier {
       }
       tempIndex++;
     });
-    print('deleteIndex = $deleteIndex');
     tempList.removeAt(deleteIndex);
+    cartString = json.encode(tempList).toString();
+    prefs.setString(Constants.cartInfo, cartString);
+
+    //重新获取购物车商品
+    getCartInfo();
+  }
+
+  ///增加某个商品数量
+  increaseGoodCount(String goodsId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cartString = prefs.getString(Constants.cartInfo);
+
+    List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
+    tempList.forEach((item) {
+      if (item['goodsId'] == goodsId) {
+        item['count']++;
+      }
+    });
+    cartString = json.encode(tempList).toString();
+    prefs.setString(Constants.cartInfo, cartString);
+
+    //重新获取购物车商品
+    getCartInfo();
+  }
+
+  ///减少某个商品数量
+  decreaseGoodCount(String goodsId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cartString = prefs.getString(Constants.cartInfo);
+
+    List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
+    tempList.forEach((item) {
+      if (item['goodsId'] == goodsId) {
+        //数量至少有1个
+        if (item['count'] >= 2) {
+          item['count']--;
+        }
+      }
+    });
     cartString = json.encode(tempList).toString();
     prefs.setString(Constants.cartInfo, cartString);
 

@@ -13,6 +13,7 @@ class DetailsBottom extends StatelessWidget {
     var price = goodsInfo.presentPrice;
     var images = goodsInfo.image1;
 
+    int totalCount = Provide.value<CartProvide>(context).totalCount;
     return Container(
       color: Colors.white,
       height: ScreenUtil().setHeight(80),
@@ -28,11 +29,23 @@ class DetailsBottom extends StatelessWidget {
                     debugPrint('购物车');
                     Toast.show(context, '购物车');
                   },
-                  child: Center(
-                    child: Icon(
-                      Icons.shopping_cart,
-                      color: Theme.of(context).primaryColor,
-                    ),
+                  child: Stack(
+                    children: <Widget>[
+                      Center(
+                        child: Icon(
+                          Icons.shopping_cart,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      Positioned(
+                        top: 3,
+                        right: 8,
+                        child: Text(
+                          '$totalCount',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -71,7 +84,8 @@ class DetailsBottom extends StatelessWidget {
                       splashColor: Colors.blueAccent,
                       onTap: () async {
                         debugPrint('立即购买');
-                        Toast.show(context, '立即购买');
+                        // Toast.show(context, '立即购买');
+                        Toast.show(context, '立即清空');
 
                         //todo 暂时用清除
                         await Provide.value<CartProvide>(context).remove();

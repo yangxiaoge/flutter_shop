@@ -18,18 +18,20 @@ class CartCount extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          _reduceBtn(),
+          _reduceBtn(context),
           _countText(),
-          _addBtn(),
+          _addBtn(context),
         ],
       ),
     );
   }
 
   /// - 号按钮
-  Widget _reduceBtn() {
+  Widget _reduceBtn(context) {
     return InkWell(
-      onTap: () {},
+      onTap: () async {
+        Provide.value<CartProvide>(context).decreaseGoodCount(item.goodsId);
+      },
       child: Container(
         width: ScreenUtil().setWidth(45),
         height: ScreenUtil().setHeight(45),
@@ -45,9 +47,11 @@ class CartCount extends StatelessWidget {
   }
 
   /// + 号按钮
-  Widget _addBtn() {
+  Widget _addBtn(context) {
     return InkWell(
-      onTap: () {},
+      onTap: () async {
+        Provide.value<CartProvide>(context).increaseGoodCount(item.goodsId);
+      },
       child: Container(
         width: ScreenUtil().setWidth(45),
         height: ScreenUtil().setHeight(45),

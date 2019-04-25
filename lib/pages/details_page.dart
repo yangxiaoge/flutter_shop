@@ -38,12 +38,16 @@ class DetailsPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Positioned(
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                    child: DetailsBottom(),
-                  )
+                  Provide<CartProvide>(
+                    builder: (context, _, val) {
+                      return Positioned(
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        child: DetailsBottom(),
+                      );
+                    },
+                  ),
                 ],
               );
             } else {

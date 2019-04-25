@@ -21,7 +21,7 @@ class CartItem extends StatelessWidget {
       child: Row(
         children: <Widget>[
           _checkBox(context),
-          _cartImg(),
+          _cartImg(context),
           _cartGoodsName(),
           _cartPrice(context),
         ],
@@ -41,18 +41,24 @@ class CartItem extends StatelessWidget {
   }
 
   ///商品图片
-  Widget _cartImg() {
+  Widget _cartImg(context) {
     return Container(
-      width: ScreenUtil().setWidth(150),
-      padding: EdgeInsets.all(3.0),
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
-          color: Colors.black12,
+        width: ScreenUtil().setWidth(150),
+        padding: EdgeInsets.all(3.0),
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: Colors.black12,
+          ),
         ),
-      ),
-      child: Image.network(item.images),
-    );
+        child: InkWell(
+          child: Image.network(item.images),
+          onTap: () {
+            //查看商品详情
+            Application.router.navigateTo(
+                context, '${Routers.detailsPage}?id=${item.goodsId}');
+          },
+        ));
   }
 
   ///商品名称
