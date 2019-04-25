@@ -6,6 +6,10 @@ class CartProvide with ChangeNotifier {
   //购物车商品json数组
   String cartString = '[]';
   List<CartInfoModel> cartList = [];
+  //商品总价
+  double totalPrice = 0;
+  //商品总数
+  int totalCount = 0;
 
   ///添加商品
   save(goodsId, goodsName, count, price, images) async {
@@ -34,7 +38,8 @@ class CartProvide with ChangeNotifier {
         'goodsName': goodsName,
         'count': count,
         'price': price,
-        'images': images
+        'images': images,
+        'isCheck': true
       };
 
       tempList.add(newGoods);
@@ -43,7 +48,7 @@ class CartProvide with ChangeNotifier {
 
     cartString = json.encode(tempList).toString();
     debugPrint('cartString字符串 = $cartString');
-    debugPrint('cartInfoList模型 = $cartList');
+    // debugPrint('cartInfoList模型 = $cartList');
 
     prefs.setString(Constants.cartInfo, cartString);
 
@@ -65,15 +70,48 @@ class CartProvide with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     cartString = prefs.getString(Constants.cartInfo);
     cartList.clear();
+
+    //先置0,防止出错
+    totalPrice = 0;
+    totalCount = 0;
+
     if (cartString != null) {
       //json.decode，防止直接转List会有问题
       List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
       tempList.forEach((item) {
+        //计算总价/总数
+        totalPrice += item['price'] * item['count'];
+        totalCount += item['count'];
+
         //把item转成model后加入cartInfoList
         cartList.add(CartInfoModel.fromJson(item));
       });
     }
 
     notifyListeners();
+  }
+
+  ///删除某个商品
+  deleteOneGoods(String goodsId) async {
+    print(goodsId);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cartString = prefs.getString(Constants.cartInfo);
+
+    List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
+    int tempIndex = 0;
+    int deleteIndex = 0;
+    tempList.forEach((item) {
+      if (item['goodsId'] == goodsId) {
+        deleteIndex = tempIndex;
+      }
+      tempIndex++;
+    });
+    print('deleteIndex = $deleteIndex');
+    tempList.removeAt(deleteIndex);
+    cartString = json.encode(tempList).toString();
+    prefs.setString(Constants.cartInfo, cartString);
+
+    //重新获取购物车商品
+    getCartInfo();
   }
 }

@@ -23,7 +23,7 @@ class CartItem extends StatelessWidget {
           _checkBox(context),
           _cartImg(),
           _cartGoodsName(),
-          _cartPrice(),
+          _cartPrice(context),
         ],
       ),
     );
@@ -33,7 +33,7 @@ class CartItem extends StatelessWidget {
   Widget _checkBox(context) {
     return Container(
       child: Checkbox(
-        value: true,
+        value: item.isCheck,
         activeColor: Theme.of(context).primaryColor,
         onChanged: (checked) {},
       ),
@@ -65,14 +65,14 @@ class CartItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(item.goodsName),
-          CartCount(),
+          CartCount(item),
         ],
       ),
     );
   }
 
   ///商品价格
-  Widget _cartPrice() {
+  Widget _cartPrice(context) {
     return Container(
       width: ScreenUtil().setWidth(150),
       alignment: Alignment.centerRight,
@@ -82,7 +82,11 @@ class CartItem extends StatelessWidget {
           Text('￥ ${item.price}'),
           Container(
             child: InkWell(
-              onTap: () {},
+              onTap: () async {
+                //删除这个商品
+                Provide.value<CartProvide>(context)
+                    .deleteOneGoods(item.goodsId);
+              },
               child: Icon(
                 Icons.delete,
                 color: Colors.black26,

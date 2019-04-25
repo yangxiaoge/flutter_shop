@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/constants/import.dart';
 
+///购物车商品，+，-数量组件
 class CartCount extends StatelessWidget {
+  final CartInfoModel item;
+  CartCount(this.item);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -66,7 +69,7 @@ class CartCount extends StatelessWidget {
       height: ScreenUtil().setHeight(45),
       alignment: Alignment.center,
       color: Colors.white,
-      child: Text('8'),
+      child: Text('${item.count}'),
     );
   }
 }

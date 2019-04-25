@@ -8,14 +8,18 @@ class CartBottom extends StatelessWidget {
       height: ScreenUtil().setWidth(130),
       padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
       color: Colors.white,
-      child: Row(
-        children: <Widget>[
-          _selectAll(context),
-          Expanded(
-            child: _totalPrice(),
-          ),
-          _pay(),
-        ],
+      child: Provide<CartProvide>(
+        builder: (context, _, val) {
+          return Row(
+            children: <Widget>[
+              _selectAll(context),
+              Expanded(
+                child: _totalPrice(context),
+              ),
+              _pay(context),
+            ],
+          );
+        },
       ),
     );
   }
@@ -38,7 +42,8 @@ class CartBottom extends StatelessWidget {
   }
 
   ///总价
-  Widget _totalPrice() {
+  Widget _totalPrice(context) {
+    double totalPrice = Provide.value<CartProvide>(context).totalPrice;
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +61,7 @@ class CartBottom extends StatelessWidget {
               Container(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  '￥1992',
+                  '￥$totalPrice',
                   style: TextStyle(
                       color: Colors.red, fontSize: ScreenUtil().setSp(36)),
                 ),
@@ -77,7 +82,7 @@ class CartBottom extends StatelessWidget {
   }
 
   ///结算
-  Widget _pay() {
+  Widget _pay(context) {
     // return Container(
     //   padding: EdgeInsets.only(left: 10),
     //   child: InkWell(
@@ -112,7 +117,7 @@ class CartBottom extends StatelessWidget {
     //     ),
     //   ),
     // );
-
+    int totalCount = Provide.value<CartProvide>(context).totalCount;
     return Padding(
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(10)),
       child: RaisedButton(
@@ -121,7 +126,7 @@ class CartBottom extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3.0)),
         color: Colors.red,
         child: Text(
-          '结算(100)',
+          '结算($totalCount)',
           style: TextStyle(color: Colors.white),
         ),
       ),
