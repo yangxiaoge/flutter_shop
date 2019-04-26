@@ -12,13 +12,16 @@ class CartPage extends StatelessWidget {
         builder: (context, snapshot) {
           List cartList = Provide.value<CartProvide>(context).cartList;
           if (snapshot.hasData && cartList != null) {
-            return Column(
+            return Stack(
               children: <Widget>[
                 Provide<CartProvide>(
                   builder: (context, _, val) {
-                    return Expanded(
+                    return Padding(
+                      //CartBottom的高度，防止商品ListView被遮挡
+                      padding: EdgeInsets.only(
+                        bottom: ScreenUtil().setHeight(130),
+                      ),
                       child: ListView.builder(
-                        shrinkWrap: true,
                         itemCount: val.cartList.length,
                         itemBuilder: (context, index) {
                           return CartItem(val.cartList[index]);
@@ -27,7 +30,12 @@ class CartPage extends StatelessWidget {
                     );
                   },
                 ),
-                CartBottom(),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: CartBottom(),
+                )
               ],
             );
           } else {

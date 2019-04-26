@@ -5,14 +5,17 @@ class CartBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: ScreenUtil().setWidth(130),
-      padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
+      // height: ScreenUtil().setHeight(130),
+      padding: EdgeInsets.only(
+          right: ScreenUtil().setWidth(10),
+          top: ScreenUtil().setWidth(5),
+          bottom: ScreenUtil().setWidth(5)),
       color: Colors.white,
       child: Provide<CartProvide>(
         builder: (context, _, val) {
           return Row(
             children: <Widget>[
-              _selectAll(context),
+              _selectAll(context, val.selectAll),
               Expanded(
                 child: _totalPrice(context),
               ),
@@ -25,15 +28,19 @@ class CartBottom extends StatelessWidget {
   }
 
   ///全选
-  Widget _selectAll(context) {
+  Widget _selectAll(context, selectAll) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Checkbox(
-            value: true,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            value: selectAll,
             activeColor: Theme.of(context).primaryColor,
-            onChanged: (checked) {},
+            onChanged: (checked) async {
+              await Provide.value<CartProvide>(context)
+                  .selectAllCheckState(checked);
+            },
           ),
           Text('全选'),
         ],
@@ -61,7 +68,8 @@ class CartBottom extends StatelessWidget {
               Container(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  '￥$totalPrice',
+                  // '￥${totalPrice}',
+                  '￥${totalPrice.toStringAsFixed(1)}',
                   style: TextStyle(
                       color: Colors.red, fontSize: ScreenUtil().setSp(36)),
                 ),

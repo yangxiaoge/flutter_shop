@@ -10,6 +10,8 @@ class CartProvide with ChangeNotifier {
   double totalPrice = 0;
   //商品总数
   int totalCount = 0;
+  //全选
+  bool selectAll = false;
 
   ///添加商品
   save(goodsId, goodsName, count, price, images) async {
@@ -81,9 +83,11 @@ class CartProvide with ChangeNotifier {
       //json.decode，防止直接转List会有问题
       List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
       tempList.forEach((item) {
-        //计算总价/总数
-        totalPrice += item['price'] * item['count'];
-        totalCount += item['count'];
+        //计算总价/总数（选中状态才计算）
+        if (item['isCheck']) {
+          totalPrice += item['price'] * item['count'];
+          totalCount += item['count'];
+        }
 
         //把item转成model后加入cartInfoList
         cartList.add(CartInfoModel.fromJson(item));
@@ -146,6 +150,39 @@ class CartProvide with ChangeNotifier {
           item['count']--;
         }
       }
+    });
+    cartString = json.encode(tempList).toString();
+    prefs.setString(Constants.cartInfo, cartString);
+
+    //重新获取购物车商品
+    getCartInfo();
+  }
+
+  ///改变某个商品的选中状态
+  changeCheckState(CartInfoModel cartItem) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cartString = prefs.getString(Constants.cartInfo);
+    List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
+    tempList.forEach((item) {
+      if (item['goodsId'] == cartItem.goodsId) {
+        item['isCheck'] = cartItem.isCheck;
+      }
+    });
+    cartString = json.encode(tempList).toString();
+    prefs.setString(Constants.cartInfo, cartString);
+
+    //重新获取购物车商品
+    getCartInfo();
+  }
+
+  ///全选/反选商品
+  selectAllCheckState(isCheck) async {
+    selectAll = isCheck;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cartString = prefs.getString(Constants.cartInfo);
+    List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
+    tempList.forEach((item) {
+      item['isCheck'] = isCheck;
     });
     cartString = json.encode(tempList).toString();
     prefs.setString(Constants.cartInfo, cartString);
