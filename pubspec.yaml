@@ -24,7 +24,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   # dio 网络框架
-  dio: ^2.0.9
+  dio: ^3.0.0
   # swiper
   flutter_swiper: ^1.1.4
   # screen util
@@ -36,7 +36,7 @@ dependencies:
   # flutter_provide 状态管理
   provide: ^1.0.2
   # fluttertoast
-  fluttertoast: ^3.0.1
+#  fluttertoast: ^3.0.1
   # fluro 路由框架
   fluro: ^1.4.0
   # flutter_html

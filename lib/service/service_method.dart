@@ -7,8 +7,8 @@ Dio dio = Dio()
   ..options.baseUrl = baseUrl
   ..options.connectTimeout = 10000
   ..options.receiveTimeout = 3000
-  ..options.contentType =
-      ContentType.parse('application/x-www-form-urlencoded');
+  ..options.contentType = 'application/x-www-form-urlencoded'
+..options.responseType = ResponseType.plain;
 
 ///统一请求封装
 Future request(String urlKey, {formData}) async {

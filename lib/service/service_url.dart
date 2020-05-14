@@ -1,9 +1,12 @@
 // easy-mock 测试地址
-//  const String baseUrl = 'https://easy-mock.com/mock/5c7cb5f7c64b7d04d10c1e09/shop_flutter/';
+//const String baseUrl = 'https://easy-mock.com/mock/5c7cb5f7c64b7d04d10c1e09/shop_flutter/';
+//fastmock
+//const String baseUrl = 'https://www.fastmock.site/mock/58fe9bc52b7283b676eb1d8f42201f93/fluttershop/';
+
 // 百姓生活+ 技术胖接口
-// const String baseUrl = 'http://v.jspang.com:8088/baixing/';
+ const String baseUrl = 'http://v.jspang.com:8088/baixing/';
 // 微信小程序抓取的接口
-const String baseUrl = 'http://wxmini.baixingliangfan.cn/baixing/';
+// const String baseUrl = 'http://wxmini.baixingliangfan.cn/baixing/';
 
 const servicePath = {
   homePageContent: 'wxmini/homePageContent',

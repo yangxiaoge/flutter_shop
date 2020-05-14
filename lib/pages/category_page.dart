@@ -321,7 +321,7 @@ class _MallGoodsListState extends State<MallGoodsList> {
 
       //provide通知刷新商品列表
       if (categoryGoodsListModel.data == null) {
-        ToastHelper.showCenterShortToast('没有更多了');
+//        ToastHelper.showCenterShortToast('没有更多了');
         Toast.show(context, '没有更多了');
         Provide.value<ChildCategoryProvide>(context).changeNomoreText('没有更多了');
       } else {
