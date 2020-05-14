@@ -1,5 +1,5 @@
 class Constants {
-  static const String appName = '百姓生活+';
+  static const String appName = '小羊商店+';
   //sp key
   static const String cartInfo = 'cartInfo';
 }
